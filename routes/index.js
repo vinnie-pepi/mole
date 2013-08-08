@@ -1,7 +1,7 @@
 module.exports = function(app) {
   app.get('/', function(req, res, next) {
     // list of profiles
-    res.render('index', { title: 'Express' });
+    res.render('index');
   });
 
   app.get('/profile/:id?', function(req, res, next) {
@@ -9,7 +9,4 @@ module.exports = function(app) {
     res.render('profile');
   });
 
-  app.get('/placefinder', function(req, res, next) {
-    res.render('placefinder', { title: 'Express' });
-  });
 };
