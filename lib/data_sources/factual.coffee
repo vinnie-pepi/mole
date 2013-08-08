@@ -7,7 +7,6 @@ class Factual
   constructor: ->
     
   getData: (query, cb)->
-    console.log query
     factual.get '/t/places',
       q: query.q
       filters: {

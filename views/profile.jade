@@ -2,9 +2,45 @@ extends layout
 block content
   div.profile
     h1 Profile
-    form(action="/searchEntity", method="post")
+    form(action="/searchEntity", method="post", id="searchForm")
       div.input-group
         input.form-control(type="text", name="q", placeholder="Search")
         span &nbsp;near&nbsp;
         input.form-control.near(type="text", name="location", placeholder='Example: Los Angeles')
         input.btn.btn-primary(type="submit", value="Search")
+  div#entities
+    ul.entityList
+  
+  script#rowTemplate(type="text/x-jquery-tmpl")
+    li.row
+      span.name
+      span.address
+      span.categories
+      span.latitude
+      span.longitude
+      
+
+
+  script.
+    var $rows = $("#entities>.entityList");
+    var rowTemplate = $("#rowTemplate").html();
+
+    function showResults(rows) {
+      $rows.html("");
+      rows.forEach(function (row, idx) {
+        var $row = $(rowTemplate);
+        $row.find(".name").html(row.name);
+        $row.find(".address").html(row.address);
+        $row.find(".categories").html((row.category_labels || []).join(","));
+        $row.find(".latitude").html(row.latitude);
+        $row.find(".longitude").html(row.longitude);
+        $rows.append($row);
+      }); 
+    }
+
+    $("#searchForm").ajaxForm({
+      success: function(rows) {
+        showResults(rows);
+      }
+    });
+    

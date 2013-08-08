@@ -28,7 +28,7 @@ module.exports = function(app, db) {
 
   app.all('/searchEntity', function (req, res, next) {
     require('../lib/data_sources').getData(req.body, function (err, data) {
-      res.json(err ? {} : data);
+      res.json(err ? [] : data);
     });
   });
 
