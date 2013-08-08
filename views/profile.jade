@@ -7,7 +7,7 @@ block content
     .container
       .row
         .col-12
-          form(action="/searchEntity", method="post", id="searchForm")
+          form#searchForm(action="/searchEntity", method="post")
             div.input-group
               input.form-control(type="text", name="q", placeholder="Search")
               span &nbsp;near&nbsp;
@@ -21,18 +21,15 @@ block content
       .col-6
         form#schedule
           h2 Schedule
+          input(type="hidden", name="profile_id", value=profile_id)
           ul.selectedList.list-group
           .form-actions
             button.btn.btn-primary.pull-right#save save
   
 
   script(type="text/javascript").
-
     $(function() {
-      var $entityList = $(".entityList");
-      var $selections  = $(".selectedList");
-      var $searchForm  = $("#searchForm");
-      var profile      = new Profile($searchForm, $entityList, $selections);
+      var profile      = new Profile();
     });
 
     

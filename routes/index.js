@@ -15,14 +15,13 @@ module.exports = function(app, db) {
   })
 
   app.get('/profile/:id?', function(req, res, next) {
-    // var profile = db.get(id);
-    res.render('profile');
+    res.render('profile', { profile_id: req.params.id });
   });
 
   app.post('/profile/:id', function(req, res, next) {
-    var userId  = params.id;
+    console.log(req.body);
+    var userId  = req.params.id;
     var geoRefs = req.body;
-
   });
 
   app.all('/searchEntity', function (req, res, next) {

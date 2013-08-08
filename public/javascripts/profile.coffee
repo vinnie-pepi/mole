@@ -1,15 +1,30 @@
 class Profile
-  constructor: (@searchForm, @entities, @selectedList) ->
+  constructor: ->
+    @initHTML()
     @registerEvents()
 
-  registerEvents: ->
-    console.log(@searchForm)
+  initHTML: ->
+    @$entityList   = $(".entityList")
+    @$schedule     = $("#schedule")
+    @$selectedList = $(".selectedList")
+    @$searchForm   = $("#searchForm")
+    @$saveSchedule = $("#save")
 
-    @searchForm.ajaxForm({
+  registerEvents: ->
+    @$searchForm.ajaxForm({
       success: (rows) => 
         @showEntities(rows)
     })
-
+    geoRefs = []
+    @$saveSchedule.click (e) =>
+      e.preventDefault()
+      profileId = @$schedule.find('input[name=profile_id]').val()
+      @$schedule.find('input.geoRef').each ->
+        ref = $(this).data()
+        ref.id = profileId
+        geoRefs.push(ref)
+      $.post('/profile/' + profileId, { refs: geoRefs });
+        
   showEntities: (rows) ->
     template = """
                li.list-group-item
@@ -35,8 +50,7 @@ class Profile
   appendSearchResult: (row, jadeTemp) ->
     $row = $(jadeTemp(row))
     $row.click (e) =>
-      @selectedList.append($row.clone())
-
-    @entities.append($row)
+      @$selectedList.append($row.clone())
+    @$entityList.append($row)
       
 window.Profile = Profile
