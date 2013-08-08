@@ -6,27 +6,30 @@ dbPath = [ conf.host, conf.port ].join(':') + '/' + conf.database
 
 module.exports = class Db extends EventEmitter
   constructor: ->
-    @users
+    @profiles
     @georefs
 
   connect:  ->
     MongoClient.connect(dbPath, (err, db) =>
-      @users   = db.collection('users')
+      @profiles   = db.collection('profiles')
       @georefs = db.collection('georefs')
       @emit('connected')
     )
 
   addProfile: (id, traits, cb) ->
     console.log('adding', id, traits)
-    @users.update({ id: id },  { $set: { traits: traits } }, { upsert: true }, cb)
+    @profiles.update({ id: id },  { $set: { traits: traits } }, { upsert: true }, cb)
 
   getProfile: (id, cb) ->
-    @users.findOne({ id: id }, cb)
+    @profiles.findOne({ id: id }, cb)
 
   getProfiles: (cb) ->
-    collection = @users
+    collection = @profiles
       .find({})
       .toArray (err, docs) ->
         cb(err, docs)
     
-  
+  saveGeoRefs: (id, locations, cb)  ->
+
+  getGeoRefs: (id, cb) ->
+

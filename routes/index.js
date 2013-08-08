@@ -4,14 +4,12 @@ module.exports = function(app, db) {
   app.get('/', function(req, res, next) {
     // list of profiles
     db.getProfiles(function(err, docs) {
-      console.log(docs);
       res.render('index', { profiles: docs });
     });
   });
 
   app.post('/', function(req, res, next) {
-    console.log(req.body, req.query);
-    db.addProfile(req.body.id, req.body.traits.split("\n"), function() {
+    db.addProfile(req.body.id, req.body.traits.split("\r"), function() {
       res.redirect('/');
     })
   })
@@ -21,9 +19,10 @@ module.exports = function(app, db) {
     res.render('profile');
   });
 
-  app.get('/profile/:id/edit', function(req, res, next) {
-    //var profile = db.get(id);
-    res.render('profile');
+  app.post('/profile/:id', function(req, res, next) {
+    var userId  = params.id;
+    var geoRefs = req.body;
+
   });
 
   app.all('/searchEntity', function (req, res, next) {
