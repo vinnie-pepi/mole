@@ -11,7 +11,7 @@ var express = require('express')
   , path = require('path');
 
 var app = express();
-var connection = require('./lib/connection');
+var Db = require('./lib/connection');
 
 // all environments
 app.set('port', process.env.PORT || 3000);

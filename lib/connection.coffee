@@ -1,15 +1,14 @@
-mongoConf = 
-  host: 'mongodb://127.0.0.1',
-  port: 27017,
-  database: 'mole'
-
-# config = require('./config.json').mongo
+conf = require('./config.json').mongo
 MongoClient = require('mongodb').MongoClient
-dbPath = [ mongoConf.host, mongoConf.port ].join(':') + '/' + mongoConf.database
-console.log dbPath
-MongoClient.connect(dbPath, (err, db) ->
-  console.log(err, db)
-)
+dbPath = [ conf.host, conf.port ].join(':') + '/' + conf.database
 
-module.exports = 'hello'
+EventEmitter = require('events').EventEmitter
 
+module.exports = class Db extends EventEmitter
+  constructor: ->
+    MongoClient.connect(dbPath, (err, db) ->
+      users   = db.collection('users')
+      georefs = db.collection('georefs')
+      @emit('connected', db, users, georefs)
+    )
+  
