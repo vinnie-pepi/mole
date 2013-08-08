@@ -1,6 +1,6 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 30px;
 }
 
 a {
@@ -12,17 +12,29 @@ a {
   margin: 0 auto;
 }
 
-
 .left-column, .right-column {
-  width: 45%;
+  width: 50%;
   float: left;
 }
 
-body .input-group .user-id {
-  width: 600px;
+body .right-column {
+  padding: 0 0 0 30px;
 }
 
-body .input-group .user-traits {
-  width: 637px;
+/* index page styles */
+
+body h2 {
+  font-size: 20px;
+  color:#757575;
+  padding-bottom: 10px;
 }
 
+body .input-group {
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.list-group-item:hover {
+  background-color: #FFFF99;
+  cursor: pointer;
+}
