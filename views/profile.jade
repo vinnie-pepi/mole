@@ -1,4 +1,6 @@
 extends layout
+block head
+  script(src='/javascripts/profile.js')
 block content
   div.profile
     h1 Profile
@@ -19,16 +21,21 @@ block content
       span.latitude
       span.longitude
       
+  ul.selectedList
 
 
   script.
+
     var $rows = $("#entities>.entityList");
     var rowTemplate = $("#rowTemplate").html();
+    var profile = new Profile($("#entities"), $('.selectedList'));
 
     function showResults(rows) {
       $rows.html("");
       rows.forEach(function (row, idx) {
-        var $row = $(rowTemplate);
+        var $row = $(rowTemplate).click(function() {
+          $('.selectedList').append('<li>appended</li>');
+        });
         $row.find(".name").html(row.name);
         $row.find(".address").html(row.address);
         $row.find(".categories").html((row.category_labels || []).join(","));
