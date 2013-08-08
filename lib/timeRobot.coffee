@@ -4,17 +4,19 @@ DAY = 86400
 
 PERCENTAGES =
   targets: 10
-  noises: 60
+  noises: 50
+  stay: 20
 
 
 class TimeRobot
   constructor: (options) ->
     {@targets, @home, @work, @noises} = options.pois
-    @tSize = @targets.entities.length
-    @nSize = if @noises then @noises.entities.length else 0
+
+    @lastEvent = null
 
 
   simEvents: (start, end) ->
+    @lastEvent = null
     events = []
     t = new Date(start)
     hours = t.getHours()
@@ -23,6 +25,7 @@ class TimeRobot
 
     while h < end
       e = @getEvent(hours, day)
+      @lastEvent = e
       events.push [h, e] if e
       h += HOUR
       hours = @getNextHour hours
@@ -61,11 +64,26 @@ class TimeRobot
    generateEvent: (h) ->
      r = Math.random() * 100
      tp = @targets.percentage || PERCENTAGES.targets
+     np = (@noises.percentage || PERCENTAGES.noises) + tp
+     sp = np + PERCENTAGES.stay
+
      if r <= tp
-       return @targets.entities[Math.round(Math.random() * @tSize)]
-     else if @nSize > 0
-       np = @noises.percentage || PERCENTAGES.noises
-       return @noises.entities[Math.round(Math.random() * @nSize)]
+       return @randomEntity(@targets.entities)
+     if r <= np
+       return @randomEntity(@noises.entities)
+     if r <= sp
+       return @lastEvent
      return null
+
+
+   randomEntity: (list) ->
+     return null if !list
+     l = list.length
+     return null if l == 0
+     idx = Math.floor(Math.random() * l)
+     idx -= 1 if idx == l
+     return list[idx]
+
+
 
 module.exports = TimeRobot
