@@ -2,8 +2,21 @@ extends layout
 
 block content
   h1 Mole
-  form
-    input
-    label User ID
-    textarea
-    button User Characteristics
+  div.left-column.profile-list
+    h2 Profiles
+    ul.list-group
+      li.list-group-item
+        h4.list-group-item-heading John Doe
+        p.list-group-item-text College Student, Movie Goer, Vacationer
+      li.list-group-item
+        h4.list-group-item-heading Justin Beiber 
+        p.list-group-item-text Concert Goer
+
+  div.right-column.create-profile
+    form
+      div.input-group
+        span.input-group-addon @
+        input.user-id.form-control(placeholder='User ID')
+      div.input-group
+        textarea.user-traits.form-control(placeholder='User Traits (line seperated)')
+      button Create User

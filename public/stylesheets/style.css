@@ -6,3 +6,23 @@ body {
 a {
   color: #00B7FF;
 }
+
+.page-width {
+  width: 980px;
+  margin: 0 auto;
+}
+
+
+.left-column, .right-column {
+  width: 45%;
+  float: left;
+}
+
+body .input-group .user-id {
+  width: 600px;
+}
+
+body .input-group .user-traits {
+  width: 637px;
+}
+
