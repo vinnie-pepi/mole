@@ -8,14 +8,15 @@ block content
       ul.list-group
         - each p in profiles
           li.list-group-item
-            h4.list-group-item-heading= p.id
-            p.list-group-item-text= p.traits
+            a(href="/profile/"+ p._id)
+              h4.list-group-item-heading= p.id
+              p.list-group-item-text= p.traits
 
     div.right-column.create-profile
       h2 Create a Profile
       form(method="POST", action="/")
         div.input-group
-          input.user-id.form-control(name="id", placeholder='User ID')
+          input.user-name.form-control(name="id", placeholder='Username')
         div.input-group
           textarea.user-traits.form-control(name="traits", placeholder='User Traits (line seperated)')
         button.btn-success.btn Create

@@ -22,6 +22,13 @@ body .right-column {
 }
 
 /* index page */
+.index a, .index a:hover {
+  color: #333;
+}
+
+.index a:hover {
+  text-decoration: none;
+}
 
 .index h2 {
   font-size: 20px;
