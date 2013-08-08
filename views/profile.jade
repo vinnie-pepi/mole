@@ -1,11 +1,10 @@
 extends layout
 block content
-  h1 Profile
-  form(action="/searchEntity", method="post")
-    p
-      label Keywords
-      input(type="text", name="q")
-    p
-      label Near
-      input(type="text", name="location")
-    input(type="submit") Search 
+  div.profile
+    h1 Profile
+    form(action="/searchEntity", method="post")
+      div.input-group
+        input.form-control(type="text", name="q", placeholder="Search")
+        span &nbsp;near&nbsp;
+        input.form-control.near(type="text", name="location", placeholder='Example: Los Angeles')
+        input.btn.btn-primary(type="submit", value="Search")
