@@ -16,10 +16,9 @@ block content
   .container
     .row
       .col-6
-        div#entities
-          ul.list-group.entityList
+        ul.list-group.entityList
       .col-6
-        ul.selectedList
+        ul.selectedList.list-group
   
   script#rowTemplate(type="text/x-jquery-tmpl")
     li.list-group-item
@@ -32,30 +31,13 @@ block content
       
 
 
-  script.
+  script(type="text/javascript").
 
-    var $rows = $("#entities>.entityList");
-    var rowTemplate = $("#rowTemplate").html();
-    var profile = new Profile($("#entities"), $('.selectedList'));
-
-    function showResults(rows) {
-      $rows.html("");
-      rows.forEach(function (row, idx) {
-        var $row = $(rowTemplate).click(function() {
-          $('.selectedList').append('<li>appended</li>');
-        });
-        $row.find(".name").html(row.name);
-        $row.find(".address").html(row.address);
-        $row.find(".categories").html((row.category_labels || []).join(","));
-        $row.find(".latitude").html(row.latitude);
-        $row.find(".longitude").html(row.longitude);
-        $rows.append($row);
-      }); 
-    }
-
-    $("#searchForm").ajaxForm({
-      success: function(rows) {
-        showResults(rows);
-      }
+    $(function() {
+      var $entityList = $(".entityList");
+      var $selections  = $(".selectedList");
+      var $searchForm  = $("#searchForm");
+      var profile      = new Profile($searchForm, $entityList, $selections);
     });
+
     
