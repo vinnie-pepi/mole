@@ -5,8 +5,8 @@ module.exports = function(app) {
   });
 
   app.get('/profile/:id?', function(req, res, next) {
-    var profile = db.get(id);
-    res.render('profile', { data: profile });
+    // var profile = db.get(id);
+    res.render('profile');
   });
 
   app.get('/placefinder', function(req, res, next) {

@@ -30,11 +30,10 @@ app.use(function(req, res, next) {
         try {
           compiled = coffee.compile(str);
           res.set('Content-Type', 'application/javascript');
-          res.send(coffee.compile(str));
+          res.end(coffee.compile(str));
         } catch (err) {
           console.error(err);
         }
-        next();
       } else {
         next();
       }
