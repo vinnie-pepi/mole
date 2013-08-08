@@ -1,16 +1,17 @@
 FactualApi = require 'factual-api'
 config = require('../config.json').factual
-factual = new FactualApi config.KEY, config.SECRET
+factual = new FactualApi config.key, config.secret
 
 class Factual
   constructor: ->
     
-  getData: ->
-    factual.get '/t/places'
-      q: "starbucks"
+  getData: (query, cb)->
+    factual.get '/t/places',
+      "q": query.q
       "include_count": "true"
     , (error, res) =>
-        console.log res.data
+      return cb(error) if error
+      return cb(null, res.data)
 
 
 module.exports = new Factual()
