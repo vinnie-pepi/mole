@@ -1,10 +1,20 @@
 var dataSources = require('../lib/data_sources');
 
-module.exports = function(app) {
+module.exports = function(app, db) {
   app.get('/', function(req, res, next) {
     // list of profiles
-    res.render('index');
+    db.getProfiles(function(err, docs) {
+      console.log(docs);
+      res.render('index', { profiles: docs });
+    });
   });
+
+  app.post('/', function(req, res, next) {
+    console.log(req.body, req.query);
+    db.addProfile(req.body.id, req.body.traits.split("\n"), function() {
+      res.redirect('/');
+    })
+  })
 
   app.get('/profile/:id?', function(req, res, next) {
     // var profile = db.get(id);

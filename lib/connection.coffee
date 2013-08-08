@@ -23,11 +23,10 @@ module.exports = class Db extends EventEmitter
   getProfile: (id, cb) ->
     @users.findOne({ id: id }, cb)
 
-  getProfiles: (id) ->
+  getProfiles: (cb) ->
     collection = @users
       .find({})
-      .limit(10)
       .toArray (err, docs) ->
-        console.dir(docs)
+        cb(err, docs)
     
   

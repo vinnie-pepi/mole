@@ -49,11 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var Db = require('./lib/connection');
 var db = new Db();
 db.on('connected', function(){
-  db.addProfile(1, 'skiier', function() {
-    db.getProfile(1, function(err, item){
-      console.log(item);
-    });
-  });
+  routes(app, db);
 });
 db.connect();
 
@@ -62,7 +58,6 @@ db.connect();
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-routes(app, db);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
