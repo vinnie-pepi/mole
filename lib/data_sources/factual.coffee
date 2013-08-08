@@ -5,6 +5,7 @@ factual.setBaseURI(config.baseUrl) if config.baseUrl
 
 class Factual
   constructor: ->
+    @api = factual
     
   getData: (query, cb)->
     factual.get '/t/places',
@@ -24,6 +25,5 @@ class Factual
         console.log error
         return cb(error)
       return cb(null, res.data)
-
 
 module.exports = new Factual()
