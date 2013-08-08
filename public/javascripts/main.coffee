@@ -1,0 +1,2 @@
+# client
+square = 2
