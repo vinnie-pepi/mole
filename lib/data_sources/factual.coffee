@@ -1,5 +1,5 @@
 FactualApi = require 'factual-api'
-config = require('./config.json').factual
+config = require('../config.json').factual
 factual = new FactualApi config.KEY, config.SECRET
 
 class Factual
