@@ -12,7 +12,6 @@ module.exports = class Db extends EventEmitter
   connect:  ->
     MongoClient.connect(dbPath, (err, db) =>
       @profiles   = db.collection('profiles')
-      @georefs = db.collection('georefs')
       @emit('connected')
     )
 
@@ -29,7 +28,7 @@ module.exports = class Db extends EventEmitter
       .toArray (err, docs) ->
         cb(err, docs)
     
-  saveGeoRefs: (id, locations, cb)  ->
+  saveGeoRefs: (id, refs, cb)  ->
+    @profiles.update({ id: id }, { $set: { refs: refs } }, { upsert: true }, cb)
 
-  getGeoRefs: (id, cb) ->
 

@@ -15,13 +15,23 @@ module.exports = function(app, db) {
   })
 
   app.get('/profile/:id?', function(req, res, next) {
-    res.render('profile', { profile_id: req.params.id });
+    db.getProfile(req.params.id, function(err, docs) {
+      console.log(docs);
+      var opts = {
+        profile_id: req.params.id
+      };
+      if(docs && docs.refs) opts.refs = docs.refs;
+      res.render('profile', opts);
+    })
   });
 
   app.post('/profile/:id', function(req, res, next) {
     console.log(req.body);
     var userId  = req.params.id;
-    var geoRefs = req.body;
+    var geoRefs = req.body.refs;
+    db.saveGeoRefs(userId, geoRefs, function() {
+      res.redirect('/profile/' + userId);
+    })
   });
 
   app.all('/searchEntity', function (req, res, next) {
