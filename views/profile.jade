@@ -19,25 +19,12 @@ block content
         h2 Search Results
         ul.list-group.entityList
       .col-6
-        h2 Schedule
-        ul.selectedList.list-group
+        form#schedule
+          h2 Schedule
+          ul.selectedList.list-group
+          .form-actions
+            button.btn.btn-primary.pull-right#save save
   
-  script#rowTemplate(type="text/x-jquery-tmpl")
-    li.list-group-item
-      .list-group-item-heading.name
-      .list-group-item-text.categories
-      div.details
-        table
-          tr
-            th Address
-            th Latitude
-            th Longitude
-          tr
-            td.address
-            td.latitude
-            td.longitude
-      
-
 
   script(type="text/javascript").
 

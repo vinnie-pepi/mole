@@ -16,6 +16,7 @@ class Profile
                  .list-group-item-heading.name= n 
                  .list-group-item-text.categories= (category_labels || []).join(',')
                  .details
+                  input.geoRef(type="hidden", data-lat=latitude, data-long=longitude, data-timestamp="")
                    table  
                      tr
                        th Address
@@ -29,6 +30,13 @@ class Profile
     jadeTemp = jade.compile(template)
     for row in rows
       row.n = row.name
-      @entities.append(jadeTemp(row))
+      @appendSearchResult(row, jadeTemp)
+
+  appendSearchResult: (row, jadeTemp) ->
+    $row = $(jadeTemp(row))
+    $row.click (e) =>
+      @selectedList.append($row.clone())
+
+    @entities.append($row)
       
 window.Profile = Profile
