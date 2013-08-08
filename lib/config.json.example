@@ -1,11 +1,11 @@
 {
-  factual: {
-    KEY: '',
-    SECRET: ''
+  "factual": {
+    "key": "",
+    "secret": ""
   },
-  mongo: {
-    host: 'mongodb://127.0.0.1',
-    port: 27017
+  "mongo": {
+    "host": "mongodb://127.0.0.1",
+    "port": 27017
   }
 }
 
