@@ -16,18 +16,26 @@ block content
   .container
     .row
       .col-6
+        h2 Search Results
         ul.list-group.entityList
       .col-6
+        h2 Schedule
         ul.selectedList.list-group
   
   script#rowTemplate(type="text/x-jquery-tmpl")
     li.list-group-item
       .list-group-item-heading.name
-      .list-group-item-text
-        span.address
-        span.categories
-        span.latitude
-        span.longitude
+      .list-group-item-text.categories
+      div.details
+        table
+          tr
+            th Address
+            th Latitude
+            th Longitude
+          tr
+            td.address
+            td.latitude
+            td.longitude
       
 
 

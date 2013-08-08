@@ -13,15 +13,22 @@ class Profile
   showEntities: (rows) ->
     template = """
                li.list-group-item
-                 .list-group-item-heading.name= name
-                 .list-group-item-text
-                   span.address= address
-                   span.categories= (category_labels || []).join(',')
-                   span.latitude= latitude
-                   span.longitude= longitude
+                 .list-group-item-heading.name= n 
+                 .list-group-item-text.categories= (category_labels || []).join(',')
+                 .details
+                   table  
+                     tr
+                       th Address
+                       th Latitude
+                       th Longitutde
+                     tr
+                       td.address= address
+                       td.latitude= latitude
+                       td.longitude= longitude
                """
     jadeTemp = jade.compile(template)
     for row in rows
+      row.n = row.name
       @entities.append(jadeTemp(row))
       
 window.Profile = Profile
