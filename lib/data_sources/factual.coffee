@@ -1,16 +1,29 @@
 FactualApi = require 'factual-api'
 config = require('../config.json').factual
 factual = new FactualApi config.key, config.secret
+factual.setBaseURI(config.baseUrl) if config.baseUrl
 
 class Factual
   constructor: ->
     
   getData: (query, cb)->
+    console.log query
     factual.get '/t/places',
-      "q": query.q
-      "include_count": "true"
+      q: query.q
+      filters: {
+        "$or": [
+          {
+            "address": {"$search": query.location}
+          },
+          {
+            "locality": {"$search": query.location}
+          }
+        ]
+      }
     , (error, res) =>
-      return cb(error) if error
+      if error
+        console.log error
+        return cb(error)
       return cb(null, res.data)
 
 
