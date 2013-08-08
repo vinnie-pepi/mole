@@ -11,7 +11,6 @@ var express = require('express')
   , path = require('path');
 
 var app = express();
-var Db = require('./lib/connection');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -47,12 +46,23 @@ app.use(function(req, res, next) {
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+var Db = require('./lib/connection');
+var db = new Db();
+db.on('connected', function(){
+  db.addProfile(1, 'skiier', function() {
+    db.getProfile(1, function(err, item){
+      console.log(item);
+    });
+  });
+});
+db.connect();
+
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-routes(app);
+routes(app, db);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
