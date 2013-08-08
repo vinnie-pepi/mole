@@ -6,7 +6,6 @@ var coffee = require('coffee-script');
 
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , fs   = require('fs')
   , path = require('path');
@@ -21,7 +20,6 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(app.router);
 app.use(function(req, res, next) {
   if (path.extname(req.path) === '.js') {
     var publicPath = path.join(__dirname, 'public', req.path).replace(/.js$/, '.coffee');
@@ -45,6 +43,7 @@ app.use(function(req, res, next) {
     next();
   }
 });
+app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -52,9 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-
-app.get('/', routes.index);
-app.get('/users', user.list);
+routes(app);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
