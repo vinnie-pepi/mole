@@ -4,24 +4,32 @@ block head
 block content
   div.profile
     h1 Profile
-    form(action="/searchEntity", method="post", id="searchForm")
-      div.input-group
-        input.form-control(type="text", name="q", placeholder="Search")
-        span &nbsp;near&nbsp;
-        input.form-control.near(type="text", name="location", placeholder='Example: Los Angeles')
-        input.btn.btn-primary(type="submit", value="Search")
-  div#entities
-    ul.entityList
+    .container
+      .row
+        .col-12
+          form(action="/searchEntity", method="post", id="searchForm")
+            div.input-group
+              input.form-control(type="text", name="q", placeholder="Search")
+              span &nbsp;near&nbsp;
+              input.form-control.near(type="text", name="location", placeholder='Example: Los Angeles')
+              input.btn.btn-primary(type="submit", value="Search")
+  .container
+    .row
+      .col-6
+        div#entities
+          ul.list-group.entityList
+      .col-6
+        ul.selectedList
   
   script#rowTemplate(type="text/x-jquery-tmpl")
-    li.row
-      span.name
-      span.address
-      span.categories
-      span.latitude
-      span.longitude
+    li.list-group-item
+      .list-group-item-heading.name
+      .list-group-item-text
+        span.address
+        span.categories
+        span.latitude
+        span.longitude
       
-  ul.selectedList
 
 
   script.
