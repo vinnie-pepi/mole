@@ -5,18 +5,16 @@ block content
   div.left-column.profile-list
     h2 Profiles
     ul.list-group
-      li.list-group-item
-        h4.list-group-item-heading John Doe
-        p.list-group-item-text College Student, Movie Goer, Vacationer
-      li.list-group-item
-        h4.list-group-item-heading Justin Beiber 
-        p.list-group-item-text Concert Goer
+      - each p in profiles
+        li.list-group-item
+          h4.list-group-item-heading= p.id
+          p.list-group-item-text= p.traits
 
   div.right-column.create-profile
     h2 Create a Profile
-    form
+    form(method="POST", action="/")
       div.input-group
-        input.user-id.form-control(placeholder='User ID')
+        input.user-id.form-control(name="id", placeholder='User ID')
       div.input-group
-        textarea.user-traits.form-control(placeholder='User Traits (line seperated)')
+        textarea.user-traits.form-control(name="traits", placeholder='User Traits (line seperated)')
       button.btn-success.btn Create

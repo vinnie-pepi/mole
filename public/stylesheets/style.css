@@ -21,20 +21,36 @@ body .right-column {
   padding: 0 0 0 30px;
 }
 
-/* index page styles */
+/* index page */
 
-body h2 {
+.index h2 {
   font-size: 20px;
   color:#757575;
   padding-bottom: 10px;
 }
 
-body .input-group {
+.index .input-group {
   width: 100%;
   padding-bottom: 10px;
 }
 
-.list-group-item:hover {
+.index .list-group-item:hover {
   background-color: #FFFF99;
   cursor: pointer;
+}
+
+/* profile page */
+
+.profile .input-group .form-control {
+  width: 400px;
+}
+
+.profile h1 {
+  font-size: 20px;
+  color:#757575;
+  padding-bottom: 10px;
+}
+
+.profile .near {
+  margin: 0 10px 0 0;
 }
