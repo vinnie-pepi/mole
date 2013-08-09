@@ -33,7 +33,7 @@ class Profile
                  .list-group-item-heading.name= n 
                  .list-group-item-text.categories= (category_labels || []).join(',')
                  .details
-                  input.geoRef(type="hidden", data-latitude=latitude, data-longitude=longitude, data-locality=locality, data-name=n)
+                   input.geoRef(type="hidden", data-latitude=latitude, data-longitude=longitude, data-locality=locality, data-name=n)
                    table  
                      tr
                        th Address
@@ -52,7 +52,12 @@ class Profile
   appendSearchResult: (row, jadeTemp) ->
     $row = $(jadeTemp(row))
     $row.click (e) =>
-      @$selectedList.append($row.clone())
+      @$selectedList.append($row.clone().addClass("schedule-item"))
+      if @$saveSchedule.hasClass('disabled') 
+        @$saveSchedule.removeClass('disabled') 
     @$entityList.append($row)
+
+
+  
       
 window.Profile = Profile
