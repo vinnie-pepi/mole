@@ -24,28 +24,24 @@ block content
     .col-4
       h2 Results
         ul.selectedList.list-group
-         li.list-group-item
-           .list-group-item-heading.name= n 
-           .list-group-item-text.categories= (category_labels || []).join(',')
-           .details
-           input.geoRef(type="hidden", data-latitude=latitude, data-longitude=longitude, data-locality=locality, data-name=n, data-address=address, data-factual_id=factual_id)
-             table  
-               tr
-                 th Address
-                 th Latitude
-                 th Longitutde
-               tr
-                 td.address= address
-                 td.latitude= latitude
-                 td.longitude= longitude
      
+  div#refs
   
 
   script(type="text/javascript").
+    var $refs = $("#refs");
+    function showRefs(refs) {
+      $refs.html('');
+      refs.forEach(function(r, i) {
+        $refs.append("<div>"+(new Date(r.timestamp).toString())+ " ---> "+r.name+"</div>");
+      });
+    }
+
     $(function() {
       var profile      = new Profile();
-      var refs = "#{JSON.stringify(refs)}";
-      console.log(refs);
+      var refs = !{JSON.stringify(refs)};
+      showRefs(refs);
     });
+
 
     

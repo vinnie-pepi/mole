@@ -25,7 +25,7 @@ class Profile
         geoRefs.push(ref)
       #$.post('/profile/' + profileId+"/createEvents", { refs: geoRefs });
       $.post '/profile/'+profileId+"/createEvents", { targets: geoRefs }, (data) =>
-        console.log data
+        showRefs(data)
         
   showEntities: (rows) ->
     template = """
@@ -53,8 +53,8 @@ class Profile
     $row = $(jadeTemp(row))
     $row.click (e) =>
       @$selectedList.append($row.clone().addClass("schedule-item"))
-      if @$saveSchedule.hasClass('disabled') 
-        @$saveSchedule.removeClass('disabled') 
+      if @$saveSchedule.hasClass('disabled')
+        @$saveSchedule.removeClass('disabled')
     @$entityList.append($row)
 
 
