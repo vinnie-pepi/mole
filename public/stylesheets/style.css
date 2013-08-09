@@ -17,6 +17,10 @@ body h1, body h2 {
   background-color: #FFFF99;
 }
 
+body .disabled {
+  display: none;
+}
+
 /* index page */
 body .right-column {
   padding: 0 0 0 30px;
@@ -70,11 +74,24 @@ body .right-column {
   width: 70px;
 }
 
-.list-group-item .name {
+.list-group-item .list-group-item-heading {
   font-weight: bold;
 }
 
-.list-group-item .categories, .details {
+.list-group-item .list-group-item-text, .list-group-item .details {
   color:#757575;
   font-size: 12px;
+}
+
+.selectedList .noise {
+  background-color: #F2F2F2;
+}
+
+.selectedList .noise .list-group-item-heading {
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.selectedList .noise .list-group-item-text {
+  font-size: 11px;
 }

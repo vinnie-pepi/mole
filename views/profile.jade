@@ -20,20 +20,25 @@ block content
         input(type="hidden", name="profile_id", value=profile_id)
         ul.selectedList.list-group
         .form-actions
-          button.btn.btn-primary.pull-right.disabled#save save
+          button.btn.btn-success.pull-right.disabled#save save
     .col-4
       h2 Results
-        ul.selectedList.list-group
-     
-  div#refs
+      ul.selectedList.list-group#refs
   
-
   script(type="text/javascript").
     var $refs = $("#refs");
     function showRefs(refs) {
       $refs.html('');
+      console.log(refs);
       refs.forEach(function(r, i) {
-        $refs.append("<div>"+(new Date(r.timestamp).toString())+ " ---> "+r.name+"</div>");
+        if(r.isNoise) {
+          noise = "list-group-item noise";
+          console.log(noise);
+        } else {
+          noise = "list-group-item";
+          console.log(noise);
+        }
+        $refs.append("<li class = '"  + noise + "'><div class='list-group-item-heading'>" + r.name + "</div><div class='list-group-item-text'>" + (new Date(r.timestamp).toString().replace(/GMT.+$/,'')) + "</div></li>");
       });
     }
 
@@ -42,6 +47,3 @@ block content
       var refs = !{JSON.stringify(refs || [])};
       showRefs(refs);
     });
-
-
-    

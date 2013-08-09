@@ -33,7 +33,7 @@ class Profile
                  .list-group-item-heading.name= n 
                  .list-group-item-text.categories= (category_labels || []).join(',')
                  .details
-                 input.geoRef(type="hidden", data-latitude=latitude, data-longitude=longitude, data-locality=locality, data-name=n, data-address=address, data-factual_id=factual_id)
+                   input.geoRef(type="hidden", data-latitude=latitude, data-longitude=longitude, data-locality=locality, data-name=n, data-address=address, data-factual_id=factual_id)
                    table  
                      tr
                        th Address
