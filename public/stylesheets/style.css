@@ -92,16 +92,16 @@ body .right-column {
   font-size: 12px;
 }
 
-.selectedList .noise {
+.list-group .noise {
   background-color: #F2F2F2;
 }
 
-.selectedList .noise .list-group-item-heading {
+.list-group .noise .list-group-item-heading {
   font-weight: normal;
   font-size: 12px;
 }
 
-.selectedList .noise .list-group-item-text {
+.list-group .noise .list-group-item-text {
   font-size: 11px;
 }
 
