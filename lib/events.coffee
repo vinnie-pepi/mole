@@ -24,9 +24,14 @@ module.exports.createEvents = (options) ->
   return events.filter (e) =>
     return e[1].latitude && e[1].longitude
   .map (e) =>
+    p = e[1]
     return {
       userId: options.userId
       timestamp: e[0]
-      latitude: e[1].latitude
-      longitude: e[1].longitude
+      latitude: p.latitude
+      longitude: p.longitude
+      name: p.name
+      address: p.address
+      isTarget: p.isTarget
+      isNoise: p.isNoise
     }

@@ -13,6 +13,12 @@ class TimeRobot
     {@targets, @home, @work, @noises} = options.pois
     @lastEvent = null
 
+    @updateEntities()
+
+  updateEntities: ->
+    target.isTarget = true for target in @targets.entities
+    noise.isNoise = true for noise in @noises.entities
+
 
   simEvents: (start, end) ->
     @lastEvent = null
