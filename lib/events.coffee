@@ -1,5 +1,5 @@
 TR = require './timeRobot'
-DAY = 86400
+DAY = 86400000
 dataSource = require './data_sources'
 
 
@@ -16,7 +16,7 @@ module.exports.createEvents = (options) ->
   daysBefore = options.daysBefore || 30
   durationDays = options.durationsDays || 28
 
-  start = d.getTime() - DAY*daysBefore - (options.timezoneOffset || d.getTimezoneOffset()) * 60
+  start = d.getTime() - DAY*daysBefore - (options.timezoneOffset || d.getTimezoneOffset()) * 60000
   end = start + DAY * durationDays
 
   events = tr.simEvents start, end

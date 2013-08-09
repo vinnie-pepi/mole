@@ -39,7 +39,7 @@ block content
 
     $(function() {
       var profile      = new Profile();
-      var refs = !{JSON.stringify(refs)};
+      var refs = !{refs ? JSON.stringify(refs) : []};
       showRefs(refs);
     });
 
