@@ -1,5 +1,13 @@
 TR = require './timeRobot'
 DAY = 86400
+dataSource = require './dataSources'
+
+
+module.exports.getNoises = (targets, cb) ->
+  locality = targets[0].locality
+  dataSource.getNoises locality, (err, pois) =>
+    return cb err, pois
+
 
 
 module.exports.createEvents = (options) ->

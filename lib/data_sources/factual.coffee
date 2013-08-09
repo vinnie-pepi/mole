@@ -26,4 +26,16 @@ class Factual
         return cb(error)
       return cb(null, res.data)
 
+  getNoises: (locality, cb( ->
+    factual.get '/t/places',
+      filters: {
+        "locality": locality
+      }
+      limit: 200
+    , (error, res) =>
+      if error
+        return cb(error)
+      return cb(null, res.data)
+
+
 module.exports = new Factual()
