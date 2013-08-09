@@ -21,6 +21,11 @@ body .disabled {
   display: none;
 }
 
+body .list-group {
+  height: 500px;
+  overflow-x: scroll;
+}
+
 /* index page */
 body .right-column {
   padding: 0 0 0 30px;
@@ -44,8 +49,12 @@ body .right-column {
 
 /* profile page */
 
+#searchForm .input-group {
+  width: 100%;
+}
+
 .profile .input-group .form-control {
-  width: 400px;
+  width: 40%;
 }
 
 .profile .near {
@@ -95,3 +104,4 @@ body .right-column {
 .selectedList .noise .list-group-item-text {
   font-size: 11px;
 }
+

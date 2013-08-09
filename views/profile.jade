@@ -20,10 +20,11 @@ block content
         input(type="hidden", name="profile_id", value=profile_id)
         ul.selectedList.list-group
         .form-actions
-          button.btn.btn-success.pull-right.disabled#save save
+          button.btn.btn-success.pull-right.disabled#save Save
     .col-4
       h2 Results
-      ul.selectedList.list-group#refs
+      ul.selectedList.list-group.results#refs
+      button.btn.btn-primary.pull-right Export
   
   script(type="text/javascript").
     var $refs = $("#refs");
