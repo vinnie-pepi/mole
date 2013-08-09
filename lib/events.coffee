@@ -2,12 +2,30 @@ TR = require './timeRobot'
 DAY = 86400000
 dataSource = require './data_sources'
 
+DAYS_BEFORE = 30
+DURATION_DAYS = 28
+
 
 module.exports.getNoises = (targets, cb) ->
   locality = targets[0].locality
   dataSource.getNoises locality, (err, pois) =>
     return cb err, pois
 
+
+module.exports.getOptions = (userId, targets, noises, c) ->
+  userId: userId
+  daysBefore: parseInt(c.daysBefore || DAYS_BEFORE)
+  durationDays: parseInt(c.durationDays || DURATION_DAYS)
+  timezoneOffset: (if c.timezoneOffset then parseInt(c.timezoneOffset) else null)
+  pois:
+    targets:
+      entities: targets
+      percentage: (if c.targetsPercentage then parseFloat(c.targetsPercentage) else null)
+    noises:
+      entities: noises
+      percentage: (if c.noisesPercentage then parseFloat(c.noisesPercentage) else null)
+    home: (c.home || null)
+    work: (c.work || null)
 
 
 module.exports.createEvents = (options) ->

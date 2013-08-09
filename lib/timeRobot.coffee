@@ -8,6 +8,8 @@ PERCENTAGES =
   noises: 50
   stay: 20
 
+BLUR_RANGE = 30 * MINUTE
+
 
 class TimeRobot
   constructor: (options) ->
@@ -32,7 +34,7 @@ class TimeRobot
     while h < end
       e = @getEvent(hours, day)
       @lastEvent = e
-      events.push [h, e] if e
+      events.push [@blurTime(h), e] if e
       h += HOUR
       hours = @getNextHour hours
       day = @getDay day, hours
@@ -80,6 +82,9 @@ class TimeRobot
      if r <= sp
        return @lastEvent
      return null
+
+   blurTime: (t) ->
+     return t + (Math.random()*2 - 1) * BLUR_RANGE
 
 
    randomEntity: (list) ->

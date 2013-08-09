@@ -11,7 +11,7 @@ module.exports = function(app, db) {
 
   app.post('/', function(req, res, next) {
     db.addProfile(req.body.id, req.body.traits.split("\r"), function() {
-      res.redirect('/');
+      res.redirect('/profile/' + req.body.id);
     })
   })
 
@@ -63,28 +63,10 @@ module.exports = function(app, db) {
     var targets = req.body.targets;
     Events.getNoises(targets, function (err, noises) {
       if (err) noises = [];
-      var options = {
-        userId: userId,
-        daysBefore: parseInt(req.body.daysBefore || 30),
-        durationDays: parseInt(req.body.durationDays || 28),
-        timezoneOffset: (req.body.timezoneOffset ? parseInt(req.body.timezoneOffset) : null),
-        pois: {
-          targets: {
-            entities: targets,
-            percentage: (req.body.targetsPercentage ? parseFloat(req.body.targetsPercentage) : null)
-          },
-          noises: {
-            entities: noises,
-            percentage: (req.body.noisesPercentage ? parseFloat(req.body.noisesPercentage) : null)
-          },
-          home: (req.body.home ? JSON.parse(req.body.home) : null),
-          work: (req.body.work ? JSON.parse(req.body.work) : null)
-        }
-      }
+      var options = Events.getOptions(userId, targets, noises, req.body);
       var events = Events.createEvents(options);
       db.saveGeoRefs(userId, events, function() {
         res.json(events);
-        //res.redirect('/profile/' + userId);
       })
     });
   });
