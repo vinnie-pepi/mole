@@ -24,7 +24,7 @@ block content
     .col-4
       h2 Results
       ul.selectedList.list-group.results#refs
-      button.btn.btn-primary.pull-right Export
+      a.btn.btn-primary.pull-right(href="/profile/" + profile_id + "/export" ) Export
   
   script(type="text/javascript").
     var $refs = $("#refs");
@@ -34,10 +34,8 @@ block content
       refs.forEach(function(r, i) {
         if(r.isNoise) {
           noise = "list-group-item noise";
-          console.log(noise);
         } else {
           noise = "list-group-item";
-          console.log(noise);
         }
         $refs.append("<li class = '"  + noise + "'><div class='list-group-item-heading'>" + r.name + "</div><div class='list-group-item-text'>" + (new Date(r.timestamp).toString().replace(/GMT.+$/,'')) + "</div></li>");
       });
