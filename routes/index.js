@@ -41,6 +41,23 @@ module.exports = function(app, db) {
     });
   });
 
+  app.get('/profile/:id/export', function (req, res) {
+    db.getProfile(req.params.id, function(err, docs) {
+      if(docs && docs.refs) {
+        res.json(docs.refs.map(function (r) {
+          return {
+            userId: r.userId,
+            timestamp: r.timestamp,
+            latitude: r.latitude,
+            longitude: r.longitude
+          };
+        }));
+      } else {
+        res.json([]);
+      }
+    })
+  });
+
   app.post('/profile/:id/createEvents', function (req, res) {
     var userId = req.params.id;
     var targets = req.body.targets;
