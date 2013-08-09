@@ -4,32 +4,48 @@ block head
 block content
   div.profile
     h1 Profile
-    .container
-      .row
-        .col-12
-          form#searchForm(action="/searchEntity", method="post")
-            div.input-group
-              input.form-control(type="text", name="q", placeholder="Search")
-              span &nbsp;near&nbsp;
-              input.form-control.near(type="text", name="location", placeholder='Example: Los Angeles')
-              input.btn.btn-primary(type="submit", value="Search")
-  .container
-    .row
-      .col-6
-        h2 Search Results
-        ul.list-group.entityList
-      .col-6
-        form#schedule
-          h2 Schedule
-          input(type="hidden", name="profile_id", value=profile_id)
-          ul.selectedList.list-group
-          .form-actions
-            button.btn.btn-primary.pull-right.disabled#save save
+    .col-12
+      form#searchForm(action="/searchEntity", method="post")
+        div.input-group
+          input.form-control(type="text", name="q", placeholder="Search")
+          span &nbsp;near&nbsp;
+          input.form-control.near(type="text", name="location", placeholder='Example: Los Angeles')
+          input.btn.btn-primary(type="submit", value="Search")
+    .col-4
+      h2 Search Results
+      ul.list-group.entityList
+    .col-4
+      form#schedule
+        h2 Schedule
+        input(type="hidden", name="profile_id", value=profile_id)
+        ul.selectedList.list-group
+        .form-actions
+          button.btn.btn-primary.pull-right.disabled#save save
+    .col-4
+      h2 Results
+        ul.selectedList.list-group
+         li.list-group-item
+           .list-group-item-heading.name= n 
+           .list-group-item-text.categories= (category_labels || []).join(',')
+           .details
+           input.geoRef(type="hidden", data-latitude=latitude, data-longitude=longitude, data-locality=locality, data-name=n, data-address=address, data-factual_id=factual_id)
+             table  
+               tr
+                 th Address
+                 th Latitude
+                 th Longitutde
+               tr
+                 td.address= address
+                 td.latitude= latitude
+                 td.longitude= longitude
+     
   
 
   script(type="text/javascript").
     $(function() {
       var profile      = new Profile();
+      var refs = "#{JSON.stringify(refs)}";
+      console.log(refs);
     });
 
     

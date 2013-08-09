@@ -3,7 +3,7 @@ extends layout
 block content
   div.index
     h1 Mole
-    div.left-column.profile-list
+    div.col-6.profile-list
       h2 Profiles
       ul.list-group
         - each p in profiles
@@ -12,7 +12,7 @@ block content
               h4.list-group-item-heading= p.id
               p.list-group-item-text= p.traits
 
-    div.right-column.create-profile
+    div.col-6.right-column.create-profile
       h2 Create a Profile
       form(method="POST", action="/")
         div.input-group
