@@ -1,4 +1,5 @@
 var dataSources = require('../lib/data_sources');
+var Events = require('../lib/events');
 
 module.exports = function(app, db) {
   app.get('/', function(req, res, next) {
@@ -38,6 +39,29 @@ module.exports = function(app, db) {
     require('../lib/data_sources').getData(req.body, function (err, data) {
       res.json(err ? [] : data);
     });
+  });
+
+  app.post('/profile/:id/createEvents', function (req, res) {
+    var options = {
+      userId: req.params.id,
+      daysBefore: parseInt(req.body.daysBefore || 30),
+      durationDays: parseInt(req.body.durationDays || 28),
+      timezoneOffset: (req.body.timezoneOffset ? parseInt(req.body.timezoneOffset) : null),
+      pois: {
+        targets: {
+          entities: JSON.parse(req.body.targets),
+          percentage: (req.body.targetsPercentage ? parseFloat(req.body.targetsPercentage) : null)
+        },
+        noises: {
+          entities: JSON.parse(req.body.noises),
+          percentage: (req.body.noisesPercentage ? parseFloat(req.body.noisesPercentage) : null)
+        },
+        home: (req.body.home ? JSON.parse(req.body.home) : null),
+        work: (req.body.work ? JSON.parse(req.body.work) : null)
+      }
+    }
+    var events = Events.createEvents(options);
+    res.json(events);
   });
 
 };
