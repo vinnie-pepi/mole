@@ -42,11 +42,12 @@ module.exports = function(app, db) {
   });
 
   app.post('/profile/:id/createEvents', function (req, res) {
-    var targets = JSON.parse(req.body.targets);
+    var userId = req.params.id;
+    var targets = req.body.targets;
     Events.getNoises(targets, function (err, noises) {
       if (err) noises = [];
       var options = {
-        userId: req.params.id,
+        userId: userId,
         daysBefore: parseInt(req.body.daysBefore || 30),
         durationDays: parseInt(req.body.durationDays || 28),
         timezoneOffset: (req.body.timezoneOffset ? parseInt(req.body.timezoneOffset) : null),
@@ -64,7 +65,10 @@ module.exports = function(app, db) {
         }
       }
       var events = Events.createEvents(options);
-      res.json(events);
+      db.saveGeoRefs(userId, events, function() {
+        res.json(events);
+        //res.redirect('/profile/' + userId);
+      })
     });
   });
 

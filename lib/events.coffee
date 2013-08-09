@@ -1,6 +1,6 @@
 TR = require './timeRobot'
 DAY = 86400
-dataSource = require './dataSources'
+dataSource = require './data_sources'
 
 
 module.exports.getNoises = (targets, cb) ->
@@ -16,12 +16,14 @@ module.exports.createEvents = (options) ->
   daysBefore = options.daysBefore || 30
   durationDays = options.durationsDays || 28
 
-  start = d.getTime - DAY*daysBefore - (options.timezoneOffset || d.getTimezoneOffset()) * 60
+  start = d.getTime() - DAY*daysBefore - (options.timezoneOffset || d.getTimezoneOffset()) * 60
   end = start + DAY * durationDays
 
   events = tr.simEvents start, end
   
-  return events.map (e) =>
+  return events.filter (e) =>
+    return e[1].latitude && e[1].longitude
+  .map (e) =>
     return {
       userId: options.userId
       timestamp: e[0]

@@ -11,7 +11,6 @@ PERCENTAGES =
 class TimeRobot
   constructor: (options) ->
     {@targets, @home, @work, @noises} = options.pois
-
     @lastEvent = null
 
 

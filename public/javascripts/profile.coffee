@@ -23,7 +23,9 @@ class Profile
         ref = $(this).data()
         ref.id = profileId
         geoRefs.push(ref)
-      $.post('/profile/' + profileId, { refs: geoRefs });
+      #$.post('/profile/' + profileId+"/createEvents", { refs: geoRefs });
+      $.post '/profile/'+profileId+"/createEvents", { targets: geoRefs }, (data) =>
+        console.log data
         
   showEntities: (rows) ->
     template = """
@@ -31,7 +33,7 @@ class Profile
                  .list-group-item-heading.name= n 
                  .list-group-item-text.categories= (category_labels || []).join(',')
                  .details
-                  input.geoRef(type="hidden", data-lat=latitude, data-long=longitude, data-timestamp="")
+                  input.geoRef(type="hidden", data-latitude=latitude, data-longitude=longitude, data-locality=locality, data-name=n)
                    table  
                      tr
                        th Address
