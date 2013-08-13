@@ -2,7 +2,6 @@ extends layout
 
 block content
   div.index
-    h1 Mole
     div.col-6.profile-list
       h2 Profiles
       ul.list-group
@@ -16,7 +15,27 @@ block content
       h2 Create a Profile
       form(method="POST", action="/")
         div.input-group
-          input.user-name.form-control(name="id", placeholder='Username')
+          span.input-group-btn
+            button.btn.btn-default.uuid-gen generate uuid
+          input.user-name.form-control(name="id", placeholder='Name or ID')
         div.input-group
-          textarea.user-traits.form-control(name="traits", placeholder='User Traits (line seperated)')
+          textarea.user-traits.form-control(name="traits", placeholder='User Traits (add description of user profile)')
         button.btn-success.btn Create
+  script(type="text/javascript").
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+
+    function guid() {
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+    }
+
+    var $uuidGen = $('.uuid-gen');
+    var $idField = $('.user-name');
+    $uuidGen.click(function(e) {
+      e.preventDefault();
+      $idField.val(guid());
+    });

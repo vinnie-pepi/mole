@@ -63,7 +63,7 @@ module.exports = function(app, db) {
             ].join("\t");
             return tabRow;
           });
-          res.setHeader('Content-Type', 'text');
+          res.setHeader('Content-Type', 'text/plain');
           res.end(tabArray.join("\n"));
         } else {
           res.json(docs.refs.map(function (r) {
