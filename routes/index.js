@@ -47,19 +47,36 @@ module.exports = function(app, db) {
     });
   });
 
-  app.get('/profile/:id/export', function (req, res) {
+  app.get('/profile.:format?/:id/export', function (req, res) {
     db.getProfile(req.params.id, function(err, docs) {
       if(docs && docs.refs) {
-        res.json(docs.refs.map(function (r) {
-          return {
-            userId: r.userId,
-            timestamp: r.timestamp,
-            latitude: r.latitude,
-            longitude: r.longitude
-          };
-        }));
+        if (req.params.format === "tab") {
+          var filler = "none";
+          var tabRow;
+          var tabArray = docs.refs.map(function (r) {
+            tabRow = [
+             r.userId,
+             r.timestamp,
+             r.latitude,
+             r.longitude,
+             filler
+            ].join("\t");
+            return tabRow;
+          });
+          res.setHeader('Content-Type', 'text');
+          res.end(tabArray.join("\n"));
+        } else {
+          res.json(docs.refs.map(function (r) {
+            return {
+              userId: r.userId,
+              timestamp: r.timestamp,
+              latitude: r.latitude,
+              longitude: r.longitude
+            };
+          }));
+        }
       } else {
-        res.json([]);
+        res.send("no results found");
       }
     })
   });
