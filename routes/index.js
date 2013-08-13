@@ -17,11 +17,17 @@ module.exports = function(app, db) {
 
   app.get('/profile/:id?', function(req, res, next) {
     db.getProfile(req.params.id, function(err, docs) {
-      console.log(docs);
       var opts = {
         profile_id: req.params.id
       };
-      if(docs && docs.refs) opts.refs = docs.refs;
+      if(docs && docs.refs) {
+        var schedule = docs.refs.filter(function(doc) {
+          if (doc.isTarget || !doc.isNoise)
+            return true;
+        });
+        opts.refs = docs.refs;
+        opts.schedule = schedule;
+      }
       res.render('profile', opts);
     })
   });
