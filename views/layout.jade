@@ -1,15 +1,22 @@
-doctype 5
+doctype html
 html
   head
     title= "Mole"
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link( rel='stylesheet', href='/stylesheets/bootstrap.min.css')
-    script(src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-    script(src = '/javascripts/jade.js')
-    script(src = '/javascripts/bootstrap.min.js')
-    script(src = '/javascripts/jquery.form.min.js')
+    link( rel='stylesheet', href='/components/bootstrap/dist/css/bootstrap.min.css')
+    link( rel='stylesheet', href='/components/mapbox.js/dist/mapbox.css')
     block head
+
   body
     h1
       a(href="/") Mole
+
     block content
+
+    script(src = '/components/jquery/dist/jquery.min.js')
+    script(src = '/javascripts/jade.js')
+    script(src = '/components/bootstrap/dist/js/bootstrap.min.js')
+    script(src = '/javascripts/jquery.form.min.js')
+    script(src = '/components/mapbox.js/dist/mapbox.js')
+
+    block javascripts

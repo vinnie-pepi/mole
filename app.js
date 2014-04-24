@@ -1,8 +1,8 @@
-
 /**
  * Module dependencies.
  */
 var coffee = require('coffee-script');
+coffee.register();
 
 var express = require('express')
   , routes = require('./routes')
@@ -45,6 +45,7 @@ app.use(function(req, res, next) {
 });
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/components', express.static(path.join(__dirname, 'bower_components')));
 
 var Db = require('./lib/connection');
 var db = new Db();
@@ -53,12 +54,11 @@ db.on('connected', function(){
 });
 db.connect();
 
-
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-http.createServer(app).listen(app.get('port'), function(){
+app.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

@@ -10,11 +10,14 @@ module.exports = function(app, db) {
   });
 
   app.post('/', function(req, res, next) {
-    db.addProfile(req.body.id, req.body.traits.split("\r"), function() {
+    db.addProfile(req.body.id, req.body.traits || '', function() {
       res.redirect('/profile/' + req.body.id);
     })
   })
+  app.get('/profile2', function(req, res, next) {
+    res.render('profile2');
 
+  });
   app.get('/profile/:id?', function(req, res, next) {
     db.getProfile(req.params.id, function(err, docs) {
       var opts = {

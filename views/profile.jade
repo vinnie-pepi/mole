@@ -1,6 +1,4 @@
 extends layout
-block head
-  script(src='/javascripts/profile.js')
 block content
   div.profile
     h1 Profile for #{profile_id}
@@ -30,6 +28,8 @@ block content
       a.btn.btn-primary.pull-right(href="/profile/" + profile_id + "/export" ) Export
       a.btn.btn-primary.pull-right(href="/profile.tab/" + profile_id + "/export" ) Export Tab
   
+block javascripts
+  script(src='/javascripts/profile.js')
   script(type="text/javascript").
     var $refs = $("#refs")
       , noise;

@@ -1,0 +1,12 @@
+extends layout
+block content
+
+  #map(style='height:280px;')
+
+block javascripts
+  script(type='text/javascript').
+    var map = L.mapbox.map('map', 'examples.map-9ijuk24y')
+      .setView([37.57, -100.37], 4);
+    map.on('click', function(e) {
+      L.marker(e.latlng).addTo(map);
+    });
