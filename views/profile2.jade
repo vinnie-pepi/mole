@@ -18,41 +18,5 @@ block content
 block javascripts
   script(type='text/javascript', src='/javascripts/profile/index.js')
   script(type='text/javascript').
-    var map = L.mapbox.map('map', 'examples.map-9ijuk24y')
-      .setView([37.57, -100.37], 4);
-    map.on('click', function(e) {
-      L.marker(e.latlng).addTo(map);
-    });
-
-    var $importForm = $('#importForm');
-    var $importButton = $importForm.find('#importButton')
-      , $importAction = $importForm.find('#importAction')
-      , $importProgress = $importForm.find('#importProgress');
-
-    function updateProgress(percent) {
-      $importProgress.find('.progress-bar').width(percent);
-    }
-
-    $importForm.ajaxForm({
-      url: "/baseline_upload",
-      beforeSend: function() {
-        $importProgress.show();
-      },
-      uploadProgress: function(e, position, total, percent) {
-        updateProgress(percent);
-      },
-      success: function() {
-        updateProgress(100);
-      },
-      complete: function(xhr) {
-        console.log(xhr.responseJSON);
-      }
-    });
-    $importAction.change(function() {
-      $importForm.submit();
-    });
-    $importButton.click(function(e) {
-      e.preventDefault();
-      $importAction.click();
-    });
+    var app = new Profile();
 
