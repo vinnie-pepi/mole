@@ -1,7 +1,19 @@
 extends layout
 block content
 
-  #map(style='height:280px;')
+  .container
+    .mapWrapper(style="border:1px solid #CCC;padding-bottom:4px;")
+      #map(style='height:280px;margin-bottom:4px;')
+      form#importForm(role='form', method='post', enctype="multipart/form-data").form-inline
+        .form-group.pull-right
+          a.btn.btn-default(href='#') Create Events
+        .form-group
+          button.btn.btn-default#importButton Import Baseline
+          input(name='baselineData', type='file')#importAction.hide
+        .form-group
+          #importProgress.progress
+            .progress-bar
+
 
 block javascripts
   script(type='text/javascript').
@@ -10,3 +22,36 @@ block javascripts
     map.on('click', function(e) {
       L.marker(e.latlng).addTo(map);
     });
+
+    var $importForm = $('#importForm');
+    var $importButton = $importForm.find('#importButton')
+      , $importAction = $importForm.find('#importAction')
+      , $importProgress = $importForm.find('#importProgress');
+
+    function updateProgress(percent) {
+      $importProgress.find('.progress-bar').width(percent);
+    }
+
+    $importForm.ajaxForm({
+      url: "/baseline_upload",
+      beforeSend: function() {
+        $importProgress.show();
+      },
+      uploadProgress: function(e, position, total, percent) {
+        updateProgress(percent);
+      },
+      success: function() {
+        updateProgress(100);
+      },
+      complete: function(xhr) {
+        console.log(xhr.responseJSON);
+      }
+    });
+    $importAction.change(function() {
+      $importForm.submit();
+    });
+    $importButton.click(function(e) {
+      e.preventDefault();
+      $importAction.click();
+    });
+

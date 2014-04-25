@@ -1,5 +1,7 @@
 var dataSources = require('../lib/data_sources');
 var Events = require('../lib/events');
+var fs = require('fs');
+var csv = require('csv');
 
 module.exports = function(app, db) {
   app.get('/', function(req, res, next) {
@@ -16,8 +18,15 @@ module.exports = function(app, db) {
   })
   app.get('/profile2', function(req, res, next) {
     res.render('profile2');
-
   });
+
+  app.post('/baseline_upload', function(req, res, next) {
+    csv().from.path(req.files.baselineData.path, { delimiter: '\t' })
+      .to.array(function(data) {
+        res.json(data);
+      });
+  });
+
   app.get('/profile/:id?', function(req, res, next) {
     db.getProfile(req.params.id, function(err, docs) {
       var opts = {
