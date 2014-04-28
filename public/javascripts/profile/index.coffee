@@ -11,12 +11,18 @@ class Profile.Map
     @homeMarker
     @addHomeMarker(homeLatLng) if homeLatLng 
     @map.setView(homeLatLng, 12)
+    @registerEvents()
 
   registerEvents: () ->
     @map.on 'contextmenu', (e) =>
       @addHomeMarker(e.latlng)
 
   addEventMarkers: (events) ->
+    console.log events
+    @map.removeLayer(@eventsLayer) if @eventsLayer
+    @eventsLayer = L.mapbox.featureLayer().addTo(@map)
+    for event in events
+      L.marker(event).addTo(@eventsLayer)
 
   addHomeMarker: (latlng) ->
     @map.removeLayer(@homeMarker) if @homeMarker
@@ -41,7 +47,8 @@ class Profile.Upload
       success: () =>
         @updateProgress(100)
       complete: (xhr) =>
-        console.log(xhr.responseJSON)
+        events = ([parseFloat(d[2]), parseFloat(d[3])] for d in xhr.responseJSON when (d[2].length && d[3].length))
+        @map.addEventMarkers(events)
 
     @$importAction.change () =>
       @$importForm.submit()
@@ -53,5 +60,9 @@ class Profile.Upload
   updateProgress: (percent) ->
     @$importProgress.find('.progress-bar').width(percent)
 
-window.Profile = Profile
+class Profile.Events
+  constructor: () ->
+    # contains all events attached to this profile
 
+
+window.Profile = Profile

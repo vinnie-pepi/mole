@@ -15,7 +15,8 @@ module.exports = function(app, db) {
     db.addProfile(req.body.id, req.body.traits || '', function() {
       res.redirect('/profile/' + req.body.id);
     })
-  })
+  });
+
   app.get('/profile2', function(req, res, next) {
     res.render('profile2');
   });
@@ -40,7 +41,8 @@ module.exports = function(app, db) {
         opts.refs = docs.refs;
         opts.schedule = schedule;
       }
-      res.render('profile', opts);
+      // render new profile page
+      res.render('profile2', opts);
     })
   });
 
@@ -104,6 +106,11 @@ module.exports = function(app, db) {
         res.json(events);
       })
     });
+  });
+
+  app.get('/profile/:id/events/new', function (req, res, next) {
+  });
+  app.post('/profile/:id/events/create', function (req, res, next) {
   });
 
 };

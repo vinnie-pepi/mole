@@ -8,7 +8,8 @@ var express = require('express')
   , routes = require('./routes')
   , http = require('http')
   , fs   = require('fs')
-  , path = require('path');
+  , path = require('path')
+  , parseless = require('./lib/helpers/parseless');
 
 var app = express();
 
@@ -21,6 +22,8 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+
+parseless.setup(app);
 app.use(function(req, res, next) {
   if (path.extname(req.path) === '.js') {
     var publicPath = path.join(__dirname, 'public', req.path).replace(/.js$/, '.coffee');
