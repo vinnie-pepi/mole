@@ -1,10 +1,13 @@
 var dataSources = require('../lib/data_sources');
-var Events = require('../lib/events');
+var EventsGenerator = require('../lib/events_generator');
 var fs = require('fs');
 var csv = require('csv');
 
 module.exports = function(app, db, mongo) {
-  var Profile = require('../lib/profile')(mongo);
+  var Profile = require('../lib/models/profile')(mongo);
+  var Events  = require('../lib/models/events')(mongo);
+
+  require('./events')(app, Events);
 
   app.get('/', function(req, res, next) {
     // list of profiles
@@ -112,13 +115,13 @@ module.exports = function(app, db, mongo) {
     })
   });
 
-  app.post('/profile/:id/createEvents', function (req, res) {
+  app.post('/profile/:id/createEventsGenerator', function (req, res) {
     var userId = req.params.id;
     var targets = req.body.targets;
-    Events.getNoises(targets, function (err, noises) {
+    EventsGenerator.getNoises(targets, function (err, noises) {
       if (err) noises = [];
-      var options = Events.getOptions(userId, targets, noises, req.body);
-      var events = Events.createEvents(options);
+      var options = EventsGenerator.getOptions(userId, targets, noises, req.body);
+      var events = EventsGenerator.createEventsGenerator(options);
       db.saveGeoRefs(userId, events, function() {
         res.json(events);
       })

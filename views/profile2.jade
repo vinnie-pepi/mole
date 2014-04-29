@@ -8,11 +8,11 @@ block content
           #map(style='height:280px;margin-bottom:4px;')
           form#importForm(role='form', method='post', enctype="multipart/form-data").form-inline
             .form-group.pull-right
-              a.btn.btn-default(href='#') Create Events
+              a.btn.btn-default(href="/profile/#{profileData._id}/events/new") Create Events
             .form-group
               button.btn.btn-default#importButton Import Baseline
               input(name='baselineData', type='file')#importAction.hide
-              input(type='hidden', name='profileId', value=_id)
+              input(type='hidden', name='profileId', value=profileData._id)
             .form-group
               #importProgress.progress
                 .progress-bar

@@ -1,0 +1,48 @@
+extends ../layout
+block content
+  .container
+    .row
+      .col-md-6
+        h1 Generating Events for
+        form(method="POST", action="/events/generate")
+          .form-group
+            label 
+              | Spread over the next 
+              em n 
+              | weeks:
+            input.form-control(type="number", name="weeks")
+          
+          .slider-container
+            each day in [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ]
+              div.slider-group
+                label= day
+                .slider-input
+                  input.slider(type="text", name="#{day}")
+          .form-group
+            label Number of Events
+            input.form-control(type="number", name="numEvents")
+          .form-group
+            label Event Origin (default home)
+            input.form-control(type="number", name="locus")
+
+          .form-group
+            label Event Radius 
+            input.form-control(type="text", name="radius")
+
+          .form-group
+            label Category Type 
+            input.form-control(type="text", name="categories")
+
+          .form-group
+            button.btn.btn-success Generate Events
+      .col-md-6
+
+block javascripts
+  script(type="text/javascript").
+    var $sliders = $('.slider');
+    $sliders.slider({
+      min: 0,
+      max: 24,
+      value: [ 8, 16 ]
+    });
+
