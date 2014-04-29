@@ -52,8 +52,8 @@ app.use('/components', express.static(path.join(__dirname, 'bower_components')))
 
 var Db = require('./lib/connection');
 var db = new Db();
-db.on('connected', function(){
-  routes(app, db);
+db.on('connected', function(mongo){
+  routes(app, db, mongo);
 });
 db.connect();
 

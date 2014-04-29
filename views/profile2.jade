@@ -2,21 +2,29 @@ extends layout
 block content
 
   .container
-    .mapWrapper(style="border:1px solid #CCC;padding-bottom:4px;")
-      #map(style='height:280px;margin-bottom:4px;')
-      form#importForm(role='form', method='post', enctype="multipart/form-data").form-inline
-        .form-group.pull-right
-          a.btn.btn-default(href='#') Create Events
-        .form-group
-          button.btn.btn-default#importButton Import Baseline
-          input(name='baselineData', type='file')#importAction.hide
-        .form-group
-          #importProgress.progress
-            .progress-bar
+    .row
+      .col-md-12
+        .mapWrapper(style="border:1px solid #CCC;padding-bottom:4px;")
+          #map(style='height:280px;margin-bottom:4px;')
+          form#importForm(role='form', method='post', enctype="multipart/form-data").form-inline
+            .form-group.pull-right
+              a.btn.btn-default(href='#') Create Events
+            .form-group
+              button.btn.btn-default#importButton Import Baseline
+              input(name='baselineData', type='file')#importAction.hide
+              input(type='hidden', name='profileId', value=_id)
+            .form-group
+              #importProgress.progress
+                .progress-bar
+    .row
+      .col-md-12
+        table.table#eventTable
 
+  input#profileData(type='hidden', data-profile=profileData)
 
 block javascripts
   script(type='text/javascript', src='/javascripts/profile/index.js')
   script(type='text/javascript').
-    var app = new Profile();
+    var profileData = $('#profileData').data('profile');
+    var app = new Profile(profileData);
 

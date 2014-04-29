@@ -7,12 +7,11 @@ dbPath = [ conf.host, conf.port ].join(':') + '/' + conf.database
 module.exports = class Db extends EventEmitter
   constructor: ->
     @profiles
-    @georefs
 
   connect:  ->
     MongoClient.connect(dbPath, (err, db) =>
       @profiles   = db.collection('profiles')
-      @emit('connected')
+      @emit('connected', db)
     )
 
   addProfile: (id, traits, cb) ->

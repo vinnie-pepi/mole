@@ -1,12 +1,13 @@
 class Profile
-  constructor: () ->
+  constructor: (profileData) ->
     homeLatLng = [ 37.775, -122.419 ]
-    events = []
-    map = new Profile.Map(homeLatLng, events)
-    form = new Profile.Upload(map)
+    events = profileData.refs || []
+    form   = new Profile.Upload()
+    map    = new Profile.Map(homeLatLng, events, form)
+    events = new Profile.Events(events)
     
 class Profile.Map
-  constructor: (homeLatLng, events) ->
+  constructor: (homeLatLng, events, @form) ->
     @map = L.mapbox.map('map', 'examples.map-9ijuk24y')
     @homeMarker
     @addHomeMarker(homeLatLng) if homeLatLng 
@@ -16,6 +17,9 @@ class Profile.Map
   registerEvents: () ->
     @map.on 'contextmenu', (e) =>
       @addHomeMarker(e.latlng)
+    @form.on 'baselineLoaded', (events) =>
+      console.log(events)
+      # @addEventMarkers(events)
 
   addEventMarkers: (events) ->
     console.log events
@@ -29,8 +33,8 @@ class Profile.Map
     @homeMarker = L.marker(latlng)
     @map.addLayer(@homeMarker)
 
-class Profile.Upload
-  constructor: (@map) ->
+class Profile.Upload extends EventEmitter
+  constructor: () ->
     @$importForm = $('#importForm')
     @$importButton   = @$importForm.find('#importButton')
     @$importAction   = @$importForm.find('#importAction')
@@ -47,8 +51,8 @@ class Profile.Upload
       success: () =>
         @updateProgress(100)
       complete: (xhr) =>
-        events = ([parseFloat(d[2]), parseFloat(d[3])] for d in xhr.responseJSON when (d[2].length && d[3].length))
-        @map.addEventMarkers(events)
+        # events = ([parseFloat(d[2]), parseFloat(d[3])] for d in xhr.responseJSON when (d[2].length && d[3].length))
+        @emit('baselineLoaded', xhr.responseJSON)
 
     @$importAction.change () =>
       @$importForm.submit()
@@ -61,8 +65,27 @@ class Profile.Upload
     @$importProgress.find('.progress-bar').width(percent)
 
 class Profile.Events
-  constructor: () ->
-    # contains all events attached to this profile
+  rowTemplate = """
+                  tr
+                    td= lat
+                    td= long
+                """
+
+  constructor: (@events) ->
+    @initHTML()
+    @renderTable()
+
+  initHTML: () ->
+    @$eventTable = $('#eventTable')
+
+  renderTable: ->
+    jadeRowTemplate = jade.compile(rowTemplate)
+    for row in @events
+      html = jadeRowTemplate(
+        lat: row[0]
+        long: row[1]
+      )
+      @$eventTable.append(html)
 
 
 window.Profile = Profile

@@ -3,10 +3,12 @@ var Events = require('../lib/events');
 var fs = require('fs');
 var csv = require('csv');
 
-module.exports = function(app, db) {
+module.exports = function(app, db, mongo) {
+  var Profile = require('../lib/profile')(mongo);
+
   app.get('/', function(req, res, next) {
     // list of profiles
-    db.getProfiles(function(err, docs) {
+    Profile.all(function(err, docs) {
       res.render('index', { profiles: docs });
     });
   });
@@ -17,18 +19,33 @@ module.exports = function(app, db) {
     })
   });
 
-  app.get('/profile2', function(req, res, next) {
-    res.render('profile2');
-  });
-
   app.post('/baseline_upload', function(req, res, next) {
+    var id      = req.body.profileId;
+    var homeRef = req.body.homeRef;
     csv().from.path(req.files.baselineData.path, { delimiter: '\t' })
       .to.array(function(data) {
-        res.json(data);
-      });
+        var cleaned = [];
+        data.forEach(function(row) {
+          if (row[2].length && row[3].length) {
+            cleaned.push([ parseFloat(row[2]), parseFloat(row[3]) ]);
+          }
+        });
+        Profile.findById(id, function(err, profile) {
+          // need to determine how you want to store refs
+          profile.pushRefs(cleaned, function(err, doc) {
+            res.json(doc);
+          });
+        });
+    });  
   });
 
   app.get('/profile/:id?', function(req, res, next) {
+    Profile.findById(req.params.id, function(err, profile) {
+      res.render('profile2', { profileData: profile.attrs()});
+    });
+  });
+
+  app.get('/profile_old/:id?', function(req, res, next) {
     db.getProfile(req.params.id, function(err, docs) {
       var opts = {
         profile_id: req.params.id
