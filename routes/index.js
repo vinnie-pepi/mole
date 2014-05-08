@@ -16,6 +16,14 @@ module.exports = function(app, db, mongo) {
     });
   });
 
+  // PROFILES REST
+  app.get('/profiles', function(req, res, next) {
+    Profile.all(function(err, docs) {
+      if (err) return next(err);
+      res.json(docs);
+    });
+  });
+
   app.post('/', function(req, res, next) {
     db.addProfile(req.body.id, req.body.traits || '', function() {
       res.redirect('/profile/' + req.body.id);

@@ -4,11 +4,6 @@ block content
     div.col-md-6.profile-list
       h2 Profiles
       ul.list-group
-        - each p in profiles
-          li.list-group-item
-            a(href="/profile/"+ p._id)
-              h4.list-group-item-heading= p.id
-              p.list-group-item-text= p.traits
 
     div.col-md-6.right-column.create-profile
       h2 Create a Profile
@@ -20,6 +15,11 @@ block content
         div.input-group
           textarea.user-traits.form-control(name="traits", placeholder='User Traits (add description of user profile)')
         button.btn-success.btn Create
+
+
+block javascripts
+  script(src='/javascripts/profiles.js')
+
   script(type="text/javascript").
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)

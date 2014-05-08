@@ -1,2 +1,0 @@
-# client
-square = 2

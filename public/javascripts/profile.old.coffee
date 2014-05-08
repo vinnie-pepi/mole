@@ -41,7 +41,6 @@ class Profile
         ref = $(this).data()
         ref.id = profileId
         geoRefs.push(ref)
-      #$.post('/profile/' + profileId+"/createEvents", { refs: geoRefs });
       $.post '/profile/'+profileId+"/createEvents", { targets: geoRefs }, (data) =>
         showRefs(data)
         
