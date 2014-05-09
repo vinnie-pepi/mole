@@ -1,9 +1,6 @@
 class Map extends EventEmitter
-  constructor: (homeLatLng, events, @form) ->
-    @map = L.mapbox.map('map', 'examples.map-9ijuk24y')
-    @homeMarker
-    @addHomeMarker(homeLatLng) if homeLatLng 
-    @map.setView(homeLatLng, 12)
+  constructor: (eleId) ->
+    @map = L.mapbox.map(eleId, 'examples.map-9ijuk24y')
     @registerEvents()
 
   registerEvents: () ->
@@ -11,7 +8,6 @@ class Map extends EventEmitter
       @addHomeMarker(e.latlng)
 
   addEventMarkers: (events) ->
-    console.log events
     @map.removeLayer(@eventsLayer) if @eventsLayer
     @eventsLayer = L.mapbox.featureLayer().addTo(@map)
     for event in events

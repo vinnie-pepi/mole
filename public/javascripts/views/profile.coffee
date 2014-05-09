@@ -22,8 +22,22 @@ ListView = Backbone.View.extend
       @$el.append(html)
 
 MapView = Backbone.View.extend
+  initialize: () ->
+    @map = new Map('map')
+    @map.on('homeRefSet', (latlng) ->
+      profile.set('homeRef', latlng)
+    )
+
+  homeLatLng: [ 37.775, -122.419 ]
+
   el: '#map'
+
   render: () ->
+    refs = profile.get('refs') || []
+    home = profile.get('homeRef') || @homeLatLng
+    @map.addHomeMarker(refs)
+    @map.addEventMarkers(refs)
 
 window.listView = new ListView()
+window.mapView = new MapView()
 

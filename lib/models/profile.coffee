@@ -11,15 +11,34 @@ schema =
 addUpdatedStamp = (obj) ->
   obj['updatedAt'] = new Date()
 
+sanitizeAttrs = (obj) ->
+  for key in obj
+    if !schema.hasOwnProperty(key)
+      delete obj[key]
+  delete obj['_id']
+  addUpdatedStamp(obj)
+
 module.exports = (db) ->
 
   coll = db.collection('profiles')
 
   class Profile extends EventEmitter
     constructor: (@doc) ->
-      @id = new ObjectID("#{@doc._id}")
+      if @doc._id
+        @id = new ObjectID("#{@doc._id}")
+      else
+        @id = null
+        @isNewRecord = true
 
-    update: (attr, val, cb) ->
+    saveNew: (cb) ->
+      if @isNewRecord
+        sanitizeAttrs(@doc)
+        coll.insert @doc, (err, result) ->
+          cb(err, result)
+      else
+        cb(err)
+
+    updateAttr: (attr, val, cb) ->
       @props[attr] = val
       addUpdatedStamp(@props)
       coll.update({ _id: @id },  { $set: @props }, { upsert: true }, cb)
@@ -30,6 +49,10 @@ module.exports = (db) ->
         @sendResponse(cb)
       )
 
+    update: (attrs, cb) ->
+      sanitizeAttrs(attrs)
+      coll.update({ _id: @id },  { $set: attrs }, { upsert: true }, cb)
+
     sendResponse: (cb) ->
       Profiles.findById(@id, (err, doc) ->
         cb(err, doc)
@@ -37,7 +60,7 @@ module.exports = (db) ->
 
     homeRef: (coords) ->
       if coords
-        @update('homeRef', coords, (err, result) ->
+        @updateAttr('homeRef', coords, (err, result) ->
         )
       else
         return @doc.homeRef
@@ -63,13 +86,8 @@ module.exports = (db) ->
       )
 
     @new: (params, cb) ->
-      for key in params
-        if !schema.hasOwnProperty(key)
-          delete params[key]
-      addUpdatedStamp(params)
-      id = params['id']
-      delete params['id']
-      coll.update({ id: id },  { $set: params }, { upsert: true }, cb)
+      profile = new Profile(params)
+      profile.saveNew(cb)
 
     constructor: (opts) ->
       return new Profile(opts)

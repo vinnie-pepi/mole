@@ -40,6 +40,14 @@ module.exports = function(app, db, mongo) {
     });
   });
 
+  app.put('/profiles/:id', function(req, res, next) {
+    Profile.findById(req.params.id, function(err, profile) {
+      profile.update(req.body, function(err) {
+        res.end();
+      })
+    });
+  });
+
   app.post('/baseline_upload', function(req, res, next) {
     var id      = req.body.profileId;
     var homeRef = req.body.homeRef;
