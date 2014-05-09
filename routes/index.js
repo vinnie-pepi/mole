@@ -11,10 +11,7 @@ module.exports = function(app, db, mongo) {
   // require('./profiles')(app, Profile);
 
   app.get('/', function(req, res, next) {
-    // list of profiles
-    Profile.all(function(err, docs) {
-      res.render('index', { profiles: docs });
-    });
+    res.render('index');
   });
 
   // PROFILES REST
@@ -24,21 +21,23 @@ module.exports = function(app, db, mongo) {
       res.json(docs);
     });
   });
+
   app.post('/profiles', function(req, res, next) {
-    Profile.new(req.body.id, req.body.traits, function(err, doc) {
+    Profile.new(req.body, function(err, doc) {
       if (err) return next(err);
-      console.log(doc);
       res.json(doc);
     });
   });
-  app.get('/profiles/:id', function(req, res, next) {
-    res.end(new Error('not yet implemented'));
-  });
 
-  app.post('/', function(req, res, next) {
-    db.addProfile(req.body.id, req.body.traits || '', function() {
-      res.redirect('/profile/' + req.body.id);
-    })
+  app.get('/profiles/:id', function(req, res, next) {
+    Profile.findById(req.params.id, function(err, profile) {
+      if (err) return next(err);
+      if (req.xhr) {
+        res.json(profile.attrs());
+      } else {
+        res.render('profile2', { profileData: profile.attrs()});
+      }
+    });
   });
 
   app.post('/baseline_upload', function(req, res, next) {
@@ -46,14 +45,17 @@ module.exports = function(app, db, mongo) {
     var homeRef = req.body.homeRef;
     csv().from.path(req.files.baselineData.path, { delimiter: '\t' })
       .to.array(function(data) {
-        var cleaned = [];
-        data.forEach(function(row) {
-          if (row[2].length && row[3].length) {
-            cleaned.push([ parseFloat(row[2]), parseFloat(row[3]) ]);
+        var cleaned = data.map(function(row) {
+          if (row[2] && row[3]) {
+            var lat = parseFloat(row[2])
+              , lng = parseFloat(row[3]);
+            if (!isNaN(lat+lng))
+              return [ row[1], lat, lng ];
           }
+        }).filter(function(row) {
+          return row;
         });
         Profile.findById(id, function(err, profile) {
-          // need to determine how you want to store refs
           profile.pushRefs(cleaned, function(err, doc) {
             res.json(doc);
           });
@@ -67,23 +69,6 @@ module.exports = function(app, db, mongo) {
     });
   });
 
-  app.get('/profile_old/:id?', function(req, res, next) {
-    db.getProfile(req.params.id, function(err, docs) {
-      var opts = {
-        profile_id: req.params.id
-      };
-      if(docs && docs.refs) {
-        var schedule = docs.refs.filter(function(doc) {
-          if (doc.isTarget || !doc.isNoise)
-            return true;
-        });
-        opts.refs = docs.refs;
-        opts.schedule = schedule;
-      }
-      // render new profile page
-      res.render('profile2', opts);
-    })
-  });
 
   app.post('/profile/:id', function(req, res, next) {
     console.log(req.body);

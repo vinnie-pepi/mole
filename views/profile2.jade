@@ -18,15 +18,33 @@ block content
                 .progress-bar
     .row
       .col-md-12
-        table.table#eventTable
+        table.table#refsTable
         button#export.btn.btn-default.btn-large.pull-right Export
         button#save.btn.btn-default.btn-large Save
 
   input#profileData(type='hidden', data-profile=profileData)
 
 block javascripts
-  script(type='text/javascript', src='/javascripts/profile/index.js')
+  script(src='/javascripts/profiles.js')
+  script(src='/javascripts/uploader.js')
+  script(src='/javascripts/map.js')
+  script(src='/javascripts/views/profile.js')
+
   script(type='text/javascript').
     var profileData = $('#profileData').data('profile');
-    var app = new Profile(profileData);
+    var profile  = new Profile({_id: profileData._id});
+    var uploader = new Uploader();
+
+    function renderViews() {
+      listView.render();
+      mapView.render();
+    }
+
+    profile.on('change', function() {
+      renderViews();
+    });
+
+
+
+  // script(type='text/javascript', src='/javascripts/profile/index.js')
 
