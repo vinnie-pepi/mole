@@ -48,11 +48,11 @@ module.exports = (db) ->
         cb(null, new Profile(doc))
       )
 
-    @new: (id, traits, cb) ->
-      coll.update({ id: id },  { $set: { traits: traits } }, { upsert: true }, cb)
+    @new: (params, cb) ->
+      coll.update({ id: params.id },  { $set: { traits: params.traits } }, { upsert: true }, cb)
 
-    constructor: (id) ->
-      return new Profile(id)
+    constructor: (opts) ->
+      return new Profile(opts)
   
   return Profiles
 

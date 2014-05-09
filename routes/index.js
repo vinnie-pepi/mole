@@ -7,7 +7,8 @@ module.exports = function(app, db, mongo) {
   var Profile = require('../lib/models/profile')(mongo);
   var Events  = require('../lib/models/events')(mongo);
 
-  require('./events')(app, Events);
+  // require('./events')(app, Events);
+  // require('./profiles')(app, Profile);
 
   app.get('/', function(req, res, next) {
     // list of profiles
@@ -22,6 +23,16 @@ module.exports = function(app, db, mongo) {
       if (err) return next(err);
       res.json(docs);
     });
+  });
+  app.post('/profiles', function(req, res, next) {
+    Profile.new(req.body.id, req.body.traits, function(err, doc) {
+      if (err) return next(err);
+      console.log(doc);
+      res.json(doc);
+    });
+  });
+  app.get('/profiles/:id', function(req, res, next) {
+    res.end(new Error('not yet implemented'));
   });
 
   app.post('/', function(req, res, next) {

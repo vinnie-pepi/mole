@@ -3,11 +3,11 @@ block content
   div.index.container
     div.col-md-6.profile-list
       h2 Profiles
-      ul.list-group
+      ul.list-group#profileList
 
     div.col-md-6.right-column.create-profile
       h2 Create a Profile
-      form(method="POST", action="/")
+      form#profileForm
         div.input-group
           span.input-group-btn
             button.btn.btn-default.uuid-gen generate uuid
@@ -21,17 +21,6 @@ block javascripts
   script(src='/javascripts/profiles.js')
 
   script(type="text/javascript").
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    }
-
-    function guid() {
-      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
-    }
-
     var $uuidGen = $('.uuid-gen');
     var $idField = $('.user-name');
     $uuidGen.click(function(e) {
