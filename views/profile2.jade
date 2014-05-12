@@ -4,6 +4,9 @@ block content
   .container
     .row
       .col-md-12
+        = profileData.id
+    .row
+      .col-md-12
         .mapWrapper(style="border:1px solid #CCC;padding-bottom:4px;")
           #map(style='height:280px;margin-bottom:4px;')
           form#importForm(role='form', method='post', enctype="multipart/form-data").form-inline

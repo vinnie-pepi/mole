@@ -8,17 +8,18 @@ ListView = Backbone.View.extend
                td= lng
            """
 
-  template: () ->
-    jade.compile(@tmplStr)
+  template: (locals) ->
+    jade.compile(@tmplStr)(locals)
 
   render: () ->
     refs = profile.attributes.refs || []
     @$el.html()
     for ref in refs
-      html = @template
+      locals =
         timestamp: ref[0]
         lat: ref[1]
         lng: ref[2]
+      html = @template(locals)
       @$el.append(html)
 
 MapView = Backbone.View.extend
