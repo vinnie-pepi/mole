@@ -6,7 +6,7 @@ factual.setBaseURI(config.baseUrl) if config.baseUrl
 module.exports = (conn) ->
   TABLE = '/t/places'
   class Events
-    @generate: (locus, distance, categories, cb) ->
+    @query: (locus, distance, categories, cb) ->
       query =
         filters:
           "category_labels":

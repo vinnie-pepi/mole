@@ -7,9 +7,6 @@ module.exports = function(app, db, mongo) {
   var Profile = require('../lib/models/profile')(mongo);
   var Events  = require('../lib/models/events')(mongo);
 
-  // require('./events')(app, Events);
-  // require('./profiles')(app, Profile);
-
   app.get('/', function(req, res, next) {
     res.render('index');
   });
@@ -127,8 +124,17 @@ module.exports = function(app, db, mongo) {
   });
 
   app.get('/profile/:id/events/new', function (req, res, next) {
+    Profile.findById(req.params.id, function(err, profile) {
+      console.log(profile.attrs());
+      res.render('events/new', { profileData: profile.attrs()});
+    });
   });
   app.post('/profile/:id/events/create', function (req, res, next) {
+  });
+  app.get('/factual', function(req, res, next) {
+    Events.query(req.query.locus, req.query.distance, req.query.categories, function(err, results) {
+      res.json(results);
+    });
   });
 
 };
