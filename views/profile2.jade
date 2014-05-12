@@ -40,11 +40,18 @@ block javascripts
       mapView.render();
     }
 
-    profile.on('change', function() {
-      renderViews();
+
+    $(function() {
+      profile.fetch({ success: function(profile) {
+        profile.on('change', function() {
+          renderViews();
+        });
+        renderViews();
+        mapView.center(profile.get('homeRef'));
+      }
+      });
     });
 
-    profile.fetch();
 
 
   // script(type='text/javascript', src='/javascripts/profile/index.js')

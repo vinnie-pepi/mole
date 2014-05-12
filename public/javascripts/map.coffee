@@ -5,6 +5,7 @@ class Map extends EventEmitter
 
   registerEvents: () ->
     @map.on 'contextmenu', (e) =>
+      @emit('homeRefSet', [ e.latlng.lat, e.latlng.lng ])
       @addHomeMarker(e.latlng)
 
   addEventMarkers: (events) ->
@@ -17,7 +18,6 @@ class Map extends EventEmitter
     @map.removeLayer(@homeMarker) if @homeMarker
     @homeMarker = L.marker(latlng)
     @map.addLayer(@homeMarker)
-    @emit('homeRefSet', latlng)
 
 window.Map = Map
 

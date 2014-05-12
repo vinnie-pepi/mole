@@ -26,17 +26,26 @@ MapView = Backbone.View.extend
     @map = new Map('map')
     @map.on('homeRefSet', (latlng) ->
       profile.set('homeRef', latlng)
+      console.log(latlng)
+      profile.save()
     )
-
-  homeLatLng: [ 37.775, -122.419 ]
 
   el: '#map'
 
   render: () ->
     refs = profile.get('refs') || []
-    home = profile.get('homeRef') || @homeLatLng
-    @map.addHomeMarker(refs)
-    @map.addEventMarkers(refs)
+    if refs and refs.length > 0
+      refs = refs.map (ref) ->
+        return [ ref[1], ref[2] ]
+      @map.addEventMarkers(refs)
+
+    home = profile.get('homeRef')
+    if home
+      @map.addHomeMarker(home)
+
+  center: (homeRef) ->
+    if homeRef and homeRef[0] and homeRef[1]
+      @map.map.setView(new L.latLng(homeRef), 10)
 
 window.listView = new ListView()
 window.mapView = new MapView()

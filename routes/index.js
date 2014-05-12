@@ -14,7 +14,7 @@ module.exports = function(app, db, mongo) {
     res.render('index');
   });
 
-  // PROFILES REST
+  // <<<< PROFILES REST
   app.get('/profiles', function(req, res, next) {
     Profile.all(function(err, docs) {
       if (err) return next(err);
@@ -43,14 +43,15 @@ module.exports = function(app, db, mongo) {
   app.put('/profiles/:id', function(req, res, next) {
     Profile.findById(req.params.id, function(err, profile) {
       profile.update(req.body, function(err) {
-        res.end();
+        if (err) return next(err);
+        res.status(200).end();
       })
     });
   });
+  // >>>> END PROFILES REST
 
   app.post('/baseline_upload', function(req, res, next) {
     var id      = req.body.profileId;
-    var homeRef = req.body.homeRef;
     csv().from.path(req.files.baselineData.path, { delimiter: '\t' })
       .to.array(function(data) {
         var cleaned = data.map(function(row) {
@@ -64,27 +65,12 @@ module.exports = function(app, db, mongo) {
           return row;
         });
         Profile.findById(id, function(err, profile) {
-          profile.pushRefs(cleaned, function(err, doc) {
-            res.json(doc);
+          profile.pushRefs(cleaned, function(err) {
+            if (err) next(err);
+            res.json({ status: 200 });
           });
         });
     });  
-  });
-
-  app.get('/profile/:id?', function(req, res, next) {
-    Profile.findById(req.params.id, function(err, profile) {
-      res.render('profile2', { profileData: profile.attrs()});
-    });
-  });
-
-
-  app.post('/profile/:id', function(req, res, next) {
-    console.log(req.body);
-    var userId  = req.params.id;
-    var geoRefs = req.body.refs;
-    db.saveGeoRefs(userId, geoRefs, function() {
-      res.redirect('/profile/' + userId);
-    })
   });
 
   app.all('/searchEntity', function (req, res, next) {

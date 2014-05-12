@@ -46,7 +46,7 @@ module.exports = (db) ->
     pushRefs: (refs, cb) ->
       coll.update({ _id: @id }, { $addToSet: { refs: { $each: refs } } }, (err, result) =>
         return cb(err) if err
-        @sendResponse(cb)
+        cb(null)
       )
 
     update: (attrs, cb) ->
@@ -58,18 +58,8 @@ module.exports = (db) ->
         cb(err, doc)
       )
 
-    homeRef: (coords) ->
-      if coords
-        @updateAttr('homeRef', coords, (err, result) ->
-        )
-      else
-        return @doc.homeRef
-
     attrs: () ->
       @doc
-
-    refs: () ->
-      @doc.refs
 
 
   class Profiles
