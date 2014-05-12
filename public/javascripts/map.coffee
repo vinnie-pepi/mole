@@ -12,12 +12,15 @@ class Map extends EventEmitter
     @map.removeLayer(@eventsLayer) if @eventsLayer
     @eventsLayer = L.mapbox.featureLayer().addTo(@map)
     for event in events
-      L.marker(event).addTo(@eventsLayer)
+      L.circleMarker(event, {radius: 5}).addTo(@eventsLayer)
 
   addHomeMarker: (latlng) ->
     @map.removeLayer(@homeMarker) if @homeMarker
     @homeMarker = L.marker(latlng)
     @map.addLayer(@homeMarker)
+
+  center: () ->
+    @map.fitBounds(@eventsLayer.getBounds())
 
 window.Map = Map
 

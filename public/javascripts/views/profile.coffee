@@ -45,7 +45,10 @@ MapView = Backbone.View.extend
 
   center: (homeRef) ->
     if homeRef and homeRef[0] and homeRef[1]
-      @map.map.setView(new L.latLng(homeRef), 10)
+      if @map.eventsLayer
+        @map.center()
+      else
+        @map.map.setView(new L.latLng(homeRef), 10)
 
 window.listView = new ListView()
 window.mapView = new MapView()
