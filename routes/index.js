@@ -133,6 +133,7 @@ module.exports = function(app, db, mongo) {
   });
   app.get('/factual', function(req, res, next) {
     Events.query(req.query.locus, req.query.distance, req.query.categories, function(err, results) {
+      if (err) return next(err);
       res.json(results);
     });
   });

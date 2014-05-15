@@ -18,7 +18,6 @@ module.exports = (conn) ->
             "$meters": distance
 
       console.log(TABLE, query)
-        
       factual.get(TABLE, query, cb)
 
     constructor: () ->

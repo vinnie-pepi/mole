@@ -1,3 +1,4 @@
+@import 'mixins';
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -70,8 +71,29 @@ body h1, body h2 {
   width: 70px;
 }
 .list-group-item {
+  position: relative;
   .list-group-item-heading {
     font-weight: bold;
+  }
+  @circle-radius: 10px;
+  .selected-status {
+    float: right;
+    width: @circle-radius*2;
+    height: @circle-radius*2;
+    border: 4px solid #CCC;
+    .border-radius(@circle-radius);
+    .glyphicon {
+      display: none;
+      color: green;
+      font-size: 2*@circle-radius;
+    }
+  }
+}
+.poi-selected {
+  .selected-status {
+    .glyphicon {
+      display: inline-block;
+    }
   }
 }
 .list-group-item .list-group-item-text, .list-group-item .details {

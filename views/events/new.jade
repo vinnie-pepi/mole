@@ -8,16 +8,23 @@ block content
         form#poiQuery
           .form-group
             label Category Type 
-            input.form-control(type="text", name="categories")
+            input.form-control(value="coffee", type="text", name="categories")
           .form-group
             label Event Origin (default home)
             input.form-control(type="text", name="locus", value="#{profileData.homeRef.join(', ')}")
           .form-group
             label Event Radius 
-            input.form-control(type="text", name="distance", value="1000")
+            input.form-control(type="text", name="distance", value="5000")
           .form-group
             button.btn.btn-success Search POI
-        #poiResults
+
+        ul#poi-list.list-group
+        ul.list-group
+          li.poiItem.list-group-item
+            .selected-status
+              span.glyphicon.glyphicon-ok-sign
+            .list-group-item-heading Starbucks
+            p Boston, MA
 
       .col-md-6#timeFrames
         h4 Time Frames
@@ -51,6 +58,7 @@ block javascripts
   script(type="text/javascript").
     var profile  = new Profile({_id: "#{profileData._id}"});
     var queryView = new QueryView();
+    var poiList = new PoiList();
 
     var $sliders = $('.slider');
     $sliders.slider({
