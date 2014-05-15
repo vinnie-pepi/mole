@@ -26,22 +26,20 @@ block content
             .list-group-item-heading Starbucks
             p Boston, MA
 
-      .col-md-6#timeFrames
+      .col-md-6#timeSelector
         h4 Time Frames
-        form(method="POST", action="/events/generate")
+        form
           .form-group
-            label 
-              | Spread over the next 
-              em n 
-              | weeks:
-            input.form-control(type="number", name="weeks")
+            input.form-control.datetime-start(type="text", name="date-start")
+          .form-group
+            input.form-control.datetime-end(type="text", name="date-end")
           
           .slider-container
             each day in [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ]
               div.slider-group
                 label= day
                 .slider-input
-                  input.slider(type="text", name="#{day}")
+                  input.slider(type="text", name="#{day}", value="8,16")
           .form-group
             label Number of Events
             input.form-control(type="number", name="numEvents")
@@ -66,4 +64,10 @@ block javascripts
       max: 24,
       value: [ 8, 16 ]
     });
+    
+    $('.datetime-start').datepicker({
+      todayHighlight: true
+    });
+    $('.datetime-end').datepicker();
 
+    var timeSelector = new TimeSelector();

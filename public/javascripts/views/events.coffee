@@ -64,3 +64,17 @@ window.PoiList = Backbone.View.extend
 
   renderNotFound: () ->
     @$el.html('<li>NO RESULTS FOUND</li>')
+
+window.TimeSelector = Backbone.View.extend
+  el: '#timeSelector'
+
+  events:
+    'submit form': 'generateEvents'
+
+  render: () ->
+
+  generateEvents: (e) ->
+    e.preventDefault()
+    q = @$el.find('form:first').serializeObject()
+    console.log(q)
+
