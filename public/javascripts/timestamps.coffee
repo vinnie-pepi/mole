@@ -22,9 +22,9 @@ class Timestamps
     dateSet = []
     while start <= end
       if options.weekRange == 'weekdays' and start.day() in @CONST.weekdays
-        dateSet.push(start.toISOString())
+        dateSet.push(moment(start))
       else if options.weekRange == 'weekends' and start.day() in @CONST.weekends
-        dateSet.push(start.toISOString())
+        dateSet.push(moment(start))
       else if options.weekRange in Object.keys(@CONST.daymap)
         if start.day() == @CONST.daymap[options.weekRange]
           dateSet.push(moment(start))

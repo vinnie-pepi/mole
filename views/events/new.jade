@@ -24,13 +24,13 @@ block content
         h4 Time Frames
         form
           .form-group
-            input.form-control.datetime-start(type="text", name="date-start")
+            input.form-control.datetime-start(type="text", name="dateStart")
           .form-group
-            input.form-control.datetime-end(type="text", name="date-end")
+            input.form-control.datetime-end(type="text", name="dateEnd")
           
           .form-group
             label Constrain to:
-            select.form-control(name="week-range")
+            select.form-control(name="weekRange")
               option(value="weekdays") weekdays
               option(value="weekends") weekends
               each day in [ 'mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays', 'saturdays', 'sundays' ]
@@ -43,7 +43,7 @@ block content
 
 
           .form-group
-            button.btn.btn-success Generate Events
+            button.btn.btn-success.btn-generate Generate Events
       .col-md-6
 
 block javascripts
@@ -63,5 +63,5 @@ block javascripts
       });
       $('.datetime-end').datepicker();
 
-      var timeSelector = new TimeSelector();
+      var timeSelector = new TimeSelector({ poiList: poiList });
     });

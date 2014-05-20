@@ -40,6 +40,11 @@ window.PoiList = Backbone.View.extend
       $target.removeClass(k)
     else
       $target.addClass(k)
+    selected = @getSelected()
+    if selected.length > 0
+      @trigger('poi:selected', selected)
+    else
+      @trigger('poi:deselected')
 
   showForm: () ->
 
@@ -68,10 +73,12 @@ window.PoiList = Backbone.View.extend
     @$el.html('<li>NO RESULTS FOUND</li>')
 
 window.TimeSelector = Backbone.View.extend
-  initialize: () ->
-    @$weekRangeSelect = $('select[name="week-range"')
-    @$sliderContainer = $('.slider-container')
+  initialize: (options) ->
+    @poiList = options.poiList
+    @timestamps = new Timestamps()
+    @initHTML()
     @renderSliders()
+    @registerEvents()
 
   sliderTmplStr: """
                    div.slider-group
@@ -82,15 +89,28 @@ window.TimeSelector = Backbone.View.extend
 
   el: '#timeSelector'
 
-  weekdays: [ 'mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays' ]
-  weekends: [ 'saturdays', 'sundays' ]
+  weekdays: [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday' ]
+  weekends: [ 'saturday', 'sunday' ]
 
   sliderTmpl: (locals) ->
     jade.compile(@sliderTmplStr)(locals)
 
   events:
     'submit form': 'generateEvents'
-    'change select[name="week-range"]': 'renderSliders'
+    'change select[name="weekRange"]': 'renderSliders'
+
+  initHTML: () ->
+    @$weekRangeSelect = $('select[name="weekRange"')
+    @$sliderContainer = $('.slider-container')
+    @$generateBtn     = $('.btn-generate')
+    # @$generateBtn.prop('disabled', true)
+
+  registerEvents: () ->
+    @poiList.on 'poi:selected', (selected) =>
+      @$generateBtn.prop('disabled', false)
+      @pois = selected
+    @poiList.on 'poi:deselected', () =>
+      @$generateBtn.prop('disabled', true)
 
   render: () ->
 
@@ -113,5 +133,5 @@ window.TimeSelector = Backbone.View.extend
   generateEvents: (e) ->
     e.preventDefault()
     q = @$el.find('form:first').serializeObject()
-    console.log(q)
+    stamps = @timestamps.generateStamps(q)
 
