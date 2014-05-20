@@ -19,12 +19,6 @@ block content
             button.btn.btn-success Search POI
 
         ul#poi-list.list-group
-        ul.list-group
-          li.poiItem.list-group-item
-            .selected-status
-              span.glyphicon.glyphicon-ok-sign
-            .list-group-item-heading Starbucks
-            p Boston, MA
 
       .col-md-6#timeSelector
         h4 Time Frames
@@ -34,12 +28,15 @@ block content
           .form-group
             input.form-control.datetime-end(type="text", name="date-end")
           
+          .form-group
+            label Constrain to:
+            select.form-control(name="week-range")
+              option(value="weekdays") weekdays
+              option(value="weekends") weekends
+              each day in [ 'mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays', 'saturdays', 'sundays' ]
+                option(value="#{day}")= day
+              
           .slider-container
-            each day in [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ]
-              div.slider-group
-                label= day
-                .slider-input
-                  input.slider(type="text", name="#{day}", value="8,16")
           .form-group
             label Number of Events
             input.form-control(type="number", name="numEvents")
@@ -51,23 +48,20 @@ block content
 
 block javascripts
   script(src='/javascripts/profiles.js')
+  script(src='/javascripts/timestamps.js')
   script(src='/javascripts/views/events.js')
 
   script(type="text/javascript").
-    var profile  = new Profile({_id: "#{profileData._id}"});
-    var queryView = new QueryView();
-    var poiList = new PoiList();
+    $(function () {
+      var profile  = new Profile({_id: "#{profileData._id}"});
+      var poiList = new PoiList();
+      var queryView = new QueryView({ poiList: poiList });
+      var timestamps = new Timestamps();
+      
+      $('.datetime-start').datepicker({
+        todayHighlight: true
+      });
+      $('.datetime-end').datepicker();
 
-    var $sliders = $('.slider');
-    $sliders.slider({
-      min: 0,
-      max: 24,
-      value: [ 8, 16 ]
+      var timeSelector = new TimeSelector();
     });
-    
-    $('.datetime-start').datepicker({
-      todayHighlight: true
-    });
-    $('.datetime-end').datepicker();
-
-    var timeSelector = new TimeSelector();

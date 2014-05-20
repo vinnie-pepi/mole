@@ -1,4 +1,6 @@
 window.QueryView = Backbone.View.extend
+  initialize: (options) ->
+    @poiList = options.poiList
   el: '#poiQuery'
   events:
     'click button': 'performQuery'
@@ -8,7 +10,7 @@ window.QueryView = Backbone.View.extend
     q.locus = q.locus.replace(' ', '').split(',')
 
     $.get '/factual', q, (results) =>
-      poiList.render(results)
+      @poiList.render(results)
 
   render: () ->
 
@@ -66,12 +68,47 @@ window.PoiList = Backbone.View.extend
     @$el.html('<li>NO RESULTS FOUND</li>')
 
 window.TimeSelector = Backbone.View.extend
+  initialize: () ->
+    @$weekRangeSelect = $('select[name="week-range"')
+    @$sliderContainer = $('.slider-container')
+    @renderSliders()
+
+  sliderTmplStr: """
+                   div.slider-group
+                     label= day
+                     .slider-input
+                       input.slider(type="text", name=day, value="8,16")
+                 """
+
   el: '#timeSelector'
+
+  weekdays: [ 'mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays' ]
+  weekends: [ 'saturdays', 'sundays' ]
+
+  sliderTmpl: (locals) ->
+    jade.compile(@sliderTmplStr)(locals)
 
   events:
     'submit form': 'generateEvents'
+    'change select[name="week-range"]': 'renderSliders'
 
   render: () ->
+
+  renderSliders: () ->
+    weekRange = @$weekRangeSelect.val()
+    htmls = []
+    if weekRange == 'weekdays'
+      htmls.push(@sliderTmpl({ day: day })) for day in @weekdays
+    else if weekRange == 'weekends'
+      htmls.push(@sliderTmpl({ day: day })) for day in @weekends
+    else
+      htmls.push(@sliderTmpl({ day: weekRange }))
+    html = htmls.join('')
+    @$sliderContainer.html(html)
+    @$sliderContainer.find('.slider').slider
+      min: 0
+      max: 24
+      value: [ 8, 16 ]
 
   generateEvents: (e) ->
     e.preventDefault()
