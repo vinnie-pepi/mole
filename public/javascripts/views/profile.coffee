@@ -27,7 +27,6 @@ MapView = Backbone.View.extend
     @map = new Map('map')
     @map.on('homeRefSet', (latlng) ->
       profile.set('homeRef', latlng)
-      console.log(latlng)
       profile.save()
     )
 

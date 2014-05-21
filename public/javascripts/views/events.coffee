@@ -75,6 +75,7 @@ window.PoiList = Backbone.View.extend
 window.TimeSelector = Backbone.View.extend
   initialize: (options) ->
     @poiList = options.poiList
+    @userId  = options.userId
     @timestamps = new Timestamps()
     @initHTML()
     @renderSliders()
@@ -130,8 +131,23 @@ window.TimeSelector = Backbone.View.extend
       max: 24
       value: [ 8, 16 ]
 
+  generateEvent: (stamp) ->
+    poi = getRandomInArray(@pois)
+    return [ stamp, poi.lat, poi.lng ]
+
   generateEvents: (e) ->
     e.preventDefault()
     q = @$el.find('form:first').serializeObject()
     stamps = @timestamps.generateStamps(q)
+    events = []
+    for stamp in stamps
+      events.push(@generateEvent(stamp))
+    $.ajax
+      type: "PUT"
+      url: "/profile/#{@userId}/events"
+      data:
+        refs: events
+      success: (ret, status, jqXHR) ->
+        console.log(docs)
+      
 

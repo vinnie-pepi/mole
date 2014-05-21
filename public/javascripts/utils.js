@@ -9,6 +9,10 @@ function guid() {
     s4() + '-' + s4() + s4() + s4();
 }
 
+function getRandomInArray(arr) {
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
 // backbone form submission requires object in this format
 $.fn.serializeObject = function() {
   var o = {};

@@ -23,24 +23,32 @@ block content
       .col-md-6#timeSelector
         h4 Time Frames
         form
-          .form-group
-            input.form-control.datetime-start(type="text", name="dateStart")
-          .form-group
-            input.form-control.datetime-end(type="text", name="dateEnd")
+          .form-inline(style="margin-bottom:12px")
+            .form-group
+              label Start Date
+              input.form-control.datetime-start(type="text", name="dateStart")
+            .form-group
+              label End Date
+              input.form-control.datetime-end(type="text", name="dateEnd")
           
           .form-group
             label Constrain to:
             select.form-control(name="weekRange")
               option(value="weekdays") weekdays
               option(value="weekends") weekends
-              each day in [ 'mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays', 'saturdays', 'sundays' ]
+              each day in [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ]
                 option(value="#{day}")= day
               
           .slider-container
+
           .form-group
             label Number of Events
             input.form-control(type="number", name="numEvents")
 
+          .form-group
+            label Offset Degrees
+            input.form-control(type="text", name="degreeOffset", placeholder="0.00001")
+            span.help-block adds a random amount of offset within limit specified
 
           .form-group
             button.btn.btn-success.btn-generate Generate Events
@@ -58,10 +66,16 @@ block javascripts
       var queryView = new QueryView({ poiList: poiList });
       var timestamps = new Timestamps();
       
+      var dateNow = moment().format('MM/DD/YYYY');
       $('.datetime-start').datepicker({
         todayHighlight: true
       });
-      $('.datetime-end').datepicker();
+      $('.datetime-end').datepicker({
+        todayHighlight: true
+      }).datepicker('update', dateNow);
 
-      var timeSelector = new TimeSelector({ poiList: poiList });
+      var timeSelector = new TimeSelector({ 
+        poiList: poiList,
+        userId: "#{profileData._id}"
+      });
     });

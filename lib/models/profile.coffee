@@ -1,4 +1,5 @@
 ObjectID = require('mongodb').ObjectID
+_ = require('lodash')
 {EventEmitter} = require('events')
 
 schema =
@@ -6,6 +7,7 @@ schema =
   traits: String
   refs: Array  # lat, lng, timestamp
   homeRef: Array
+  tzOffset: Number # float
   updatedAt: Date
 
 addUpdatedStamp = (obj) ->
@@ -46,11 +48,13 @@ module.exports = (db) ->
     pushRefs: (refs, cb) ->
       coll.update({ _id: @id }, { $addToSet: { refs: { $each: refs } } }, (err, result) =>
         return cb(err) if err
-        cb(null)
+        cb(null, @attrs())
       )
 
     update: (attrs, cb) ->
       sanitizeAttrs(attrs)
+      # if not attrs.tzOffset or _.isEqual(attrs.homeRef, @doc.homeRef)
+      # set the timezone
       coll.update({ _id: @id },  { $set: attrs }, { upsert: true }, cb)
 
     sendResponse: (cb) ->
@@ -83,7 +87,3 @@ module.exports = (db) ->
       return new Profile(opts)
   
   return Profiles
-
-
-
-

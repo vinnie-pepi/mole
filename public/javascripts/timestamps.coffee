@@ -46,15 +46,5 @@ class Timestamps
       stamps.push(date.add(startMil + randMil, 'ms').toISOString())
     return stamps
 
-fixture0 =
-  dateStart: '05/01/2014'
-  dateEnd: '05/30/2014'
-  weekRange: "monday"
-  friday: "8,16"
-  monday: "8,16"
-  thursday: "8,16"
-  tuesday: "8,16"
-  wednesday: "8,16"
-  numEvents: 12
 
 window.Timestamps =  Timestamps

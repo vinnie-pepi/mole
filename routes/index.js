@@ -125,12 +125,20 @@ module.exports = function(app, db, mongo) {
 
   app.get('/profile/:id/events/new', function (req, res, next) {
     Profile.findById(req.params.id, function(err, profile) {
-      console.log(profile.attrs());
       res.render('events/new', { profileData: profile.attrs()});
     });
   });
-  app.post('/profile/:id/events/create', function (req, res, next) {
+
+  app.put('/profile/:id/events', function (req, res, next) {
+    Profile.findById(req.params.id, function(err, profile) {
+      if(err) return res.next(err);
+      profile.pushRefs(req.body.refs, function(err, docs) {
+        if(err) return res.next(err);
+        res.json(docs);
+      });
+    });
   });
+
   app.get('/factual', function(req, res, next) {
     Events.query(req.query.locus, req.query.distance, req.query.categories, function(err, results) {
       if (err) return next(err);
