@@ -33,7 +33,7 @@ block content
           
           .form-group
             label Constrain to:
-            select.form-control(name="weekRange")
+            select.rangeSelector.form-control(name="weekRange")
               option(value="weekdays") weekdays
               option(value="weekends") weekends
               each day in [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ]

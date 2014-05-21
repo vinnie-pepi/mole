@@ -101,7 +101,7 @@ window.TimeSelector = Backbone.View.extend
     'change select[name="weekRange"]': 'renderSliders'
 
   initHTML: () ->
-    @$weekRangeSelect = $('select[name="weekRange"')
+    @$weekRangeSelect = $('select[name="weekRange"]')
     @$sliderContainer = $('.slider-container')
     @$generateBtn     = $('.btn-generate')
     # @$generateBtn.prop('disabled', true)
@@ -131,9 +131,21 @@ window.TimeSelector = Backbone.View.extend
       max: 24
       value: [ 8, 16 ]
 
-  generateEvent: (stamp) ->
+  offsetCoord: (coord, offset) ->
+    neg = !!Math.round(Math.random()*1)
+    randOffset = Math.random() * offset
+    if neg then randOffset = -(randOffset)
+    return coord + randOffset
+
+  generateEvent: (stamp, offset) ->
     poi = getRandomInArray(@pois)
-    return [ stamp, poi.lat, poi.lng ]
+    newCoords =
+      lat: poi.lat
+      lng: poi.lng
+    if offset and offset > 0
+      newCoords.lat = @offsetCoord(newCoords.lat, offset)
+      newCoords.lng = @offsetCoord(newCoords.lng, offset)
+    return [ stamp, newCoords.lat, newCoords.lng ]
 
   generateEvents: (e) ->
     e.preventDefault()
@@ -141,13 +153,14 @@ window.TimeSelector = Backbone.View.extend
     stamps = @timestamps.generateStamps(q)
     events = []
     for stamp in stamps
-      events.push(@generateEvent(stamp))
+      events.push(@generateEvent(stamp, q.degreeOffset))
     $.ajax
       type: "PUT"
       url: "/profile/#{@userId}/events"
       data:
         refs: events
       success: (ret, status, jqXHR) ->
-        console.log(docs)
+        # window.location = "/profile/#{docs._id}"
+        console.log(ret)
       
 
