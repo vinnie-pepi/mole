@@ -146,4 +146,16 @@ module.exports = function(app, db, mongo) {
     });
   });
 
+  app.get('/export/:id', function(req, res, next) {
+    Profile.findById(req.params.id, function(err, profile) {
+      var attrs = profile.attrs();
+      if (attrs.refs) {
+        attrs.refs.forEach(function(ref) {
+          ref.unshift(attrs.id);
+        });
+        csv().from.array(attrs.refs, { delimiter: "\t" }).to(res);
+      }
+    });
+  });
+
 };

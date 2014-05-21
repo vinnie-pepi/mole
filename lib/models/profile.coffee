@@ -73,6 +73,7 @@ module.exports = (db) ->
           cb(err, docs)
 
     @findById: (id, cb) ->
+      console.log(id)
       id = new ObjectID("#{id}")
       coll.findOne({ _id: id }, (err, doc) ->
         if err then return cb(err)

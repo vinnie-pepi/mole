@@ -22,7 +22,7 @@ block content
     .row
       .col-md-12
         table.table#refsTable
-        button#export.btn.btn-default.btn-large.pull-right Export
+        a#export.btn.btn-default.btn-large.pull-right(href="/export/#{profileData._id}") Export
         button#save.btn.btn-default.btn-large Save
 
   input#profileData(type='hidden', data-profile=profileData)
