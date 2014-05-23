@@ -9,6 +9,7 @@ var express = require('express')
   , http = require('http')
   , fs   = require('fs')
   , path = require('path')
+  , config = require('./lib/config.json')
   , parseless = require('./lib/helpers/parseless');
 
 var app = express();
@@ -22,6 +23,11 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+
+app.use(function(req, res, next) {
+  res.locals.config = config;
+  next();
+});
 
 parseless.setup(app);
 app.use(function(req, res, next) {

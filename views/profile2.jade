@@ -34,24 +34,28 @@ block javascripts
   script(src='/javascripts/views/profile.js')
 
   script(type='text/javascript').
-    var profileData = $('#profileData').data('profile');
-    var profile  = new Profile({_id: profileData._id});
-    var uploader = new Uploader();
-
-    function renderViews() {
-      listView.render();
-      mapView.render();
-    }
-
-
     $(function() {
-      profile.fetch({ success: function(profile) {
-        profile.on('change', function() {
-          renderViews();
-        });
-        renderViews();
-        mapView.center(profile.get('homeRef'));
+
+      var profileData = $('#profileData').data('profile');
+      var profile  = new Profile({_id: profileData._id});
+      var uploader = new Uploader(profile);
+      var listView = new ListView(profile)
+      var mapView  = new MapView(profile, "#{config.mapbox.id}")
+
+      function renderViews() {
+        listView.render();
+        mapView.render();
       }
+
+
+      profile.fetch({ 
+        success: function(profile) {
+          profile.on('change', function() {
+            renderViews();
+          });
+          renderViews();
+          mapView.center(profile.get('homeRef'));
+        }
       });
     });
 

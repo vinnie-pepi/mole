@@ -1,4 +1,5 @@
 ListView = Backbone.View.extend
+  initialize: (@profile) ->
   el: '#refsTable'
 
   tmplStr: """
@@ -12,7 +13,7 @@ ListView = Backbone.View.extend
     jade.compile(@tmplStr)(locals)
 
   render: () ->
-    refs = profile.attributes.refs || []
+    refs = @profile.attributes.refs || []
     @$el.html()
     for ref in refs
       locals =
@@ -23,23 +24,23 @@ ListView = Backbone.View.extend
       @$el.append(html)
 
 MapView = Backbone.View.extend
-  initialize: () ->
-    @map = new Map('map')
-    @map.on('homeRefSet', (latlng) ->
-      profile.set('homeRef', latlng)
-      profile.save()
+  initialize: (@profile, mapboxId) ->
+    @map = new Map('map', mapboxId)
+    @map.on('homeRefSet', (latlng) =>
+      @profile.set('homeRef', latlng)
+      @profile.save()
     )
 
   el: '#map'
 
   render: () ->
-    refs = profile.get('refs') || []
+    refs = @profile.get('refs') || []
     if refs and refs.length > 0
       refs = refs.map (ref) ->
         return [ ref[1], ref[2] ]
       @map.addEventMarkers(refs)
 
-    home = profile.get('homeRef')
+    home = @profile.get('homeRef')
     if home
       @map.addHomeMarker(home)
 
@@ -50,6 +51,6 @@ MapView = Backbone.View.extend
       else
         @map.map.setView(new L.latLng(homeRef), 10)
 
-window.listView = new ListView()
-window.mapView = new MapView()
+window.ListView = ListView
+window.MapView = MapView
 

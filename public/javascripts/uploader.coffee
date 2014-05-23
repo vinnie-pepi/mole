@@ -1,5 +1,5 @@
 class Uploader
-  constructor: () ->
+  constructor: (@model) ->
     @$importForm = $('#importForm')
     @$importButton   = @$importForm.find('#importButton')
     @$importAction   = @$importForm.find('#importAction')
@@ -29,6 +29,6 @@ class Uploader
     @$importProgress.find('.progress-bar').width(percent)
 
   completeUpload: (response) ->
-    profile.fetch()
+    @model.fetch()
 
 window.Uploader = Uploader

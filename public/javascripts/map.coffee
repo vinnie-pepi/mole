@@ -1,6 +1,6 @@
 class Map extends EventEmitter
-  constructor: (eleId) ->
-    @map = L.mapbox.map(eleId, 'examples.map-i86nkdio')
+  constructor: (eleId, mapboxId) ->
+    @map = L.mapbox.map(eleId, mapboxId)
     @registerEvents()
 
   registerEvents: () ->
