@@ -1,5 +1,5 @@
 FactualApi = require 'factual-api'
-config = require('../config.json').factual
+config = require('../config.json').factual.prod
 factual = new FactualApi config.key, config.secret
 factual.setBaseURI(config.baseUrl) if config.baseUrl
 
