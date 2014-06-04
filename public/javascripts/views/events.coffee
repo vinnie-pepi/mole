@@ -6,7 +6,7 @@ window.QueryView = Backbone.View.extend
   el: '#poiQuery'
 
   events:
-    'click button': 'performQuery'
+    'click #performSearch': 'performQuery'
 
   performQuery: (e) ->
     e.preventDefault()
@@ -27,14 +27,16 @@ window.QueryView = Backbone.View.extend
     selectedIdx = 0
 
     toggleSelection = () ->
-      console.log($selector)
       nextIdx = nextIdxLooped(options, selectedIdx)
       $button.html(options[selectedIdx])
       $selector.html(options[nextIdx])
       $input.attr('name', options[selectedIdx])
       selectedIdx = nextIdx
     
-    $selector.click () ->
+    $button.click (e) ->
+      e.preventDefault()
+    $selector.click (e) ->
+      e.preventDefault()
       toggleSelection()
 
     toggleSelection()
@@ -96,96 +98,4 @@ window.PoiList = Backbone.View.extend
 
   renderNotFound: () ->
     @$el.html('<li>NO RESULTS FOUND</li>')
-
-window.TimeSelector = Backbone.View.extend
-  initialize: (options) ->
-    @poiList = options.poiList
-    @userId  = options.userId
-    @timestamps = new Timestamps()
-    @initHTML()
-    @renderSliders()
-    @registerEvents()
-
-  sliderTmplStr: """
-                   div.slider-group
-                     label= day
-                     .slider-input
-                       input.slider(type="text", name=day, value="8,16")
-                 """
-
-  el: '#timeSelector'
-
-  weekdays: [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday' ]
-  weekends: [ 'saturday', 'sunday' ]
-
-  sliderTmpl: (locals) ->
-    jade.compile(@sliderTmplStr)(locals)
-
-  events:
-    'submit form': 'generateEvents'
-    'change select[name="weekRange"]': 'renderSliders'
-
-  initHTML: () ->
-    @$weekRangeSelect = $('select[name="weekRange"]')
-    @$sliderContainer = $('.slider-container')
-    @$generateBtn     = $('.btn-generate')
-    # @$generateBtn.prop('disabled', true)
-
-  registerEvents: () ->
-    @poiList.on 'poi:selected', (selected) =>
-      @$generateBtn.prop('disabled', false)
-      @pois = selected
-    @poiList.on 'poi:deselected', () =>
-      @$generateBtn.prop('disabled', true)
-
-  render: () ->
-
-  renderSliders: () ->
-    weekRange = @$weekRangeSelect.val()
-    htmls = []
-    if weekRange == 'weekdays'
-      htmls.push(@sliderTmpl({ day: day })) for day in @weekdays
-    else if weekRange == 'weekends'
-      htmls.push(@sliderTmpl({ day: day })) for day in @weekends
-    else
-      htmls.push(@sliderTmpl({ day: weekRange }))
-    html = htmls.join('')
-    @$sliderContainer.html(html)
-    @$sliderContainer.find('.slider').slider
-      min: 0
-      max: 24
-      value: [ 8, 16 ]
-
-  offsetCoord: (coord, offset) ->
-    neg = !!Math.round(Math.random()*1)
-    randOffset = Math.random() * offset
-    if neg then randOffset = -(randOffset)
-    return coord + randOffset
-
-  generateEvent: (stamp, offset) ->
-    poi = getRandomInArray(@pois)
-    newCoords =
-      lat: poi.lat
-      lng: poi.lng
-    if offset and offset > 0
-      newCoords.lat = @offsetCoord(newCoords.lat, offset)
-      newCoords.lng = @offsetCoord(newCoords.lng, offset)
-    return [ stamp, newCoords.lat, newCoords.lng ]
-
-  generateEvents: (e) ->
-    e.preventDefault()
-    q = @$el.find('form:first').serializeObject()
-    stamps = @timestamps.generateStamps(q)
-    events = []
-    for stamp in stamps
-      events.push(@generateEvent(stamp, q.degreeOffset))
-    $.ajax
-      type: "PUT"
-      url: "/profile/#{@userId}/events"
-      data:
-        refs: events
-      success: (ret, status, jqXHR) ->
-        # window.location = "/profile/#{docs._id}"
-        console.log(ret)
-      
 

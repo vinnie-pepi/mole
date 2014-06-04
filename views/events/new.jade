@@ -4,29 +4,42 @@ block content
     h1 Generating Events for
     .row
       .col-md-6
-        h4 POI Search
-        form#poiQuery
-          .form-group
-            .input-group#searchType
-              input.form-control(value="coffee", type="text", name="categories")
-              .input-group-btn
-                button.btn.btn-default.dropdown-toggle(data-toggle="dropdown") 
-                  | Search
-                  span.caret
-                ul.dropdown-menu.pull-right
-                  li
-                    a(href="#option") Search
+        ul.nav.nav-pills
+          li.active
+            a(href="#poiSearchTab", data-toggle="pill") POI Search
+          li
+            a(href="#manualEntryTab", data-toggle="pill") Manual Entry
 
-          .form-group
-            label Event Origin (default home)
-            input.form-control(type="text", name="locus", value="#{profileData.homeRef.join(', ')}")
-          .form-group
-            label Event Radius 
-            input.form-control(type="text", name="distance", value="5000")
-          .form-group
-            button.btn.btn-success Search POI
+        .tab-content.dashboard-batch-status
+          .tab-pane.active#poiSearchTab
+            form#poiQuery
+              .form-group
+                .input-group#searchType
+                  input.form-control(value="coffee", type="text", name="categories")
+                  .input-group-btn
+                    button.btn.btn-default.dropdown-toggle(data-toggle="dropdown") 
+                      | Search
+                      span.caret
+                    ul.dropdown-menu.pull-right
+                      li
+                        a(href="#option") Search
 
-        ul#poi-list.list-group
+              .form-group
+                label Event Origin (default home)
+                input.form-control(type="text", name="locus", value="#{profileData.homeRef.join(', ')}")
+              .form-group
+                label Event Radius 
+                input.form-control(type="text", name="distance", value="5000")
+              .form-group
+                button.btn.btn-success#performSearch Search POI
+
+            ul#poi-list.list-group
+
+          .tab-pane.active#manualEntryTab
+            form#manualEntry
+              .form-group
+                label Event Origin (default home)
+                input.form-control(type="text", name="locus", value="#{profileData.homeRef.join(', ')}")
 
       .col-md-6#timeSelector
         h4 Time Frames
@@ -73,6 +86,7 @@ block javascripts
   script(src='/javascripts/profiles.js')
   script(src='/javascripts/timestamps.js')
   script(src='/javascripts/views/events.js')
+  script(src='/javascripts/views/time_selector.js')
 
   script(type="text/javascript").
     $(function () {
