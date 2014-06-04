@@ -7,8 +7,16 @@ block content
         h4 POI Search
         form#poiQuery
           .form-group
-            label Category Type 
-            input.form-control(value="coffee", type="text", name="categories")
+            .input-group#searchType
+              input.form-control(value="coffee", type="text", name="categories")
+              .input-group-btn
+                button.btn.btn-default.dropdown-toggle(data-toggle="dropdown") 
+                  | Search
+                  span.caret
+                ul.dropdown-menu.pull-right
+                  li
+                    a(href="#option") Search
+
           .form-group
             label Event Origin (default home)
             input.form-control(type="text", name="locus", value="#{profileData.homeRef.join(', ')}")
@@ -31,6 +39,13 @@ block content
               label End Date
               input.form-control.datetime-end(type="text", name="dateEnd")
           
+          .form-group
+            label Timezone Offset
+            select.form-control(name="tzOffset")
+              option(value="-5") EST
+              option(value="-6") CST
+              option(value="-7") MST
+              option(value="-8") PST
           .form-group
             label Constrain to:
             select.rangeSelector.form-control(name="weekRange")

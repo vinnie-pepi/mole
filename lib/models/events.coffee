@@ -6,16 +6,21 @@ factual.setBaseURI(config.baseUrl) if config.baseUrl
 module.exports = (conn) ->
   TABLE = '/t/places'
   class Events
-    @query: (locus, distance, categories, cb) ->
+    @query: (q, cb) ->
       query =
-        filters:
-          "category_labels":
-            "$search":
-              categories
         geo:
           "$circle":
-            "$center": locus
-            "$meters": distance
+            "$center": q.locus
+            "$meters": q.distance
+
+      if q.categories
+        query['filters'] =
+          "category_labels":
+            "$search":
+              q.categories
+
+      else if q.search
+        query['q'] = q.search
 
       console.log(TABLE, query)
       factual.get(TABLE, query, cb)

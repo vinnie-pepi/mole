@@ -13,6 +13,12 @@ function getRandomInArray(arr) {
   return arr[Math.floor(Math.random()*arr.length)];
 }
 
+function nextIdxLooped(arr, idx) {
+  var len = arr.length;
+  if (idx == (len - 1)) return 0;
+  return ++idx;
+}
+
 // backbone form submission requires object in this format
 $.fn.serializeObject = function() {
   var o = {};
