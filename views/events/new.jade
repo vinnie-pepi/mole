@@ -38,11 +38,13 @@ block content
 
             ul#poi-list.list-group
 
-          .tab-pane.active#manualEntryTab
+          .tab-pane#manualEntryTab
             form#manualEntry
               .form-group
-                label Event Origin (default home)
-                input.form-control(type="text", name="locus", value="#{profileData.homeRef.join(', ')}")
+                label New Event Locus (default home)
+                .input-group
+                  input.form-control(type="text", name="locus", value=profileData.homeRef.join(', '))
+                  span.input-group-addon.glyphicon.glyphicon-globe 
 
       .col-md-6#timeSelector
         h4 Time Frames
@@ -84,19 +86,29 @@ block content
           .form-group
             button.btn.btn-success.btn-generate Generate Events
       .col-md-6
+    #mapBoxModal
 
 block javascripts
   script(src='/javascripts/profiles.js')
   script(src='/javascripts/timestamps.js')
   script(src='/javascripts/views/events.js')
   script(src='/javascripts/views/time_selector.js')
+  script(src='/javascripts/views/geo_selector.js')
 
   script(type="text/javascript").
     $(function () {
       var profile  = new Profile({_id: "#{profileData._id}"});
-      var poiList = new PoiList();
-      var queryView = new QueryView({ poiList: poiList });
-      var timestamps = new Timestamps();
+      var poiList     = new PoiList();
+      var queryView   = new QueryView({ poiList: poiList });
+      var timestamps  = new Timestamps();
+      var geoSelector = new GeoSelector({ mapBoxId: "#{config.mapbox.id}" });
+
+      var $manualEntryForm = $('#manualEntry')
+        , $mTarget = $manualEntryForm.find('.glyphicon-globe')
+        , $mInput  = $manualEntryForm.find('input:first');
+
+      geoSelector.registerLayer('manualEntry', $mTarget, $mInput);
+      geoSelector.start();
       
       var dateNow = moment().format('MM/DD/YYYY');
       $('.datetime-start').datepicker({
