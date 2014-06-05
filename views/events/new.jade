@@ -1,6 +1,6 @@
 extends ../layout
 block content
-  .container
+  .container.page-events
     h1 Generating Events for
     .row
       .col-md-6
@@ -26,7 +26,10 @@ block content
 
               .form-group
                 label Event Origin (default home)
-                input.form-control(type="text", name="locus", value="#{profileData.homeRef.join(', ')}")
+                .input-group
+                  input.form-control(type="text", name="locus", value=profileData.homeRef.join(', '))
+                  span.input-group-addon.glyphicon.glyphicon-globe 
+                    
               .form-group
                 label Event Radius 
                 input.form-control(type="text", name="distance", value="5000")
