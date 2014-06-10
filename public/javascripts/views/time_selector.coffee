@@ -1,6 +1,7 @@
 window.TimeSelector = Backbone.View.extend
   initialize: (options) ->
     @poiList = options.poiList
+    @geoSelector = options.geoSelector
     @userId  = options.userId
     @timestamps = new Timestamps()
     @initHTML()
@@ -50,8 +51,15 @@ window.TimeSelector = Backbone.View.extend
       @pois = selected
     @poiList.on 'poi:deselected', () =>
       @$generateBtn.prop('disabled', true)
+    @geoSelector.on 'geoSelection', (selected) =>
+      @pois = selected
 
-  render: () ->
+    $('a[data-toggle="pill"]').on 'shown.bs.tab', (e) =>
+      h = e.target.hash
+      if h == '#poiSearchTab'
+        @pois = @poiList.getSelected()
+      else if h == '#manualEntryTab'
+        @pois = @geoSelector.getLatLng()
 
   renderSliders: () ->
     weekRange = @$weekRangeSelect.val()
@@ -92,6 +100,7 @@ window.TimeSelector = Backbone.View.extend
     events = []
     for stamp in stamps
       events.push(@generateEvent(stamp, q.degreeOffset))
+
     $.ajax
       type: "PUT"
       url: "/profile/#{@userId}/events"

@@ -57,7 +57,7 @@ module.exports = function(app, mongo, controllers) {
       if(err) return res.next(err);
       profile.pushRefs(req.body.refs, function(err, docs) {
         if(err) return res.next(err);
-        res.json(docs);
+        res.json(profile.attrs());
       });
     });
   });

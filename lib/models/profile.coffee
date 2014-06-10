@@ -5,7 +5,7 @@ _ = require('lodash')
 schema =
   id: String
   traits: String
-  refs: Array  # lat, lng, timestamp
+  refs: Array  # timestamp, lat, lng
   homeRef: Array
   tzOffset: Number # float
   updatedAt: Date

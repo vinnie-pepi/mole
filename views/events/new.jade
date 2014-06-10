@@ -3,15 +3,15 @@ block content
   .container.page-events
     h1 Generating Events for
     .row
-      .col-md-6
+      .col-md-6.poi-section
         ul.nav.nav-pills
-          li.active
+          li
             a(href="#poiSearchTab", data-toggle="pill") POI Search
           li
             a(href="#manualEntryTab", data-toggle="pill") Manual Entry
 
         .tab-content.dashboard-batch-status
-          .tab-pane.active#poiSearchTab
+          .tab-pane#poiSearchTab
             form#poiQuery
               .form-group
                 .input-group#searchType
@@ -26,9 +26,7 @@ block content
 
               .form-group
                 label Event Origin (default home)
-                .input-group
-                  input.form-control(type="text", name="locus", value=profileData.homeRef.join(', '))
-                  span.input-group-addon.glyphicon.glyphicon-globe 
+                input.form-control(type="text", name="locus", value=profileData.homeRef.join(', '))
                     
               .form-group
                 label Event Radius 
@@ -74,6 +72,14 @@ block content
               
           .slider-container
 
+          .form-group.hide
+            label Distribution of Events:
+            .checkbox-inline
+              input(type="radio", value="even", name="distribution") 
+              | Even
+              input(type="radio", value="random", name="distribution") 
+              | Random
+
           .form-group
             label Number of Events
             input.form-control(type="number", name="numEvents")
@@ -89,37 +95,24 @@ block content
     #mapBoxModal
 
 block javascripts
-  script(src='/javascripts/profiles.js')
+
   script(src='/javascripts/timestamps.js')
-  script(src='/javascripts/views/events.js')
-  script(src='/javascripts/views/time_selector.js')
-  script(src='/javascripts/views/geo_selector.js')
+  script(src='/javascripts/events/geo_selector.js')
+
+  script(src='/javascripts/events/manual_entry_view.js')
+  script(src='/javascripts/events/poi_list_view.js')
+  script(src='/javascripts/events/query_view.js')
+  script(src='/javascripts/events/poi_controller.js')
+  script(src='/javascripts/events/time_selector.js')
+  script(src='/javascripts/events/event_generator.js')
+  script(src='/javascripts/events/app.js')
 
   script(type="text/javascript").
     $(function () {
-      var profile  = new Profile({_id: "#{profileData._id}"});
-      var poiList     = new PoiList();
-      var queryView   = new QueryView({ poiList: poiList });
-      var timestamps  = new Timestamps();
-      var geoSelector = new GeoSelector({ mapBoxId: "#{config.mapbox.id}" });
 
-      var $manualEntryForm = $('#manualEntry')
-        , $mTarget = $manualEntryForm.find('.glyphicon-globe')
-        , $mInput  = $manualEntryForm.find('input:first');
-
-      geoSelector.registerLayer('manualEntry', $mTarget, $mInput);
-      geoSelector.start();
-      
-      var dateNow = moment().format('MM/DD/YYYY');
-      $('.datetime-start').datepicker({
-        todayHighlight: true
+      var eventApp = new EventApp({
+        _id: "#{profileData._id}",
+        mapBoxId: "#{config.mapbox.id}"
       });
-      $('.datetime-end').datepicker({
-        todayHighlight: true
-      }).datepicker('update', dateNow);
-
-      var timeSelector = new TimeSelector({ 
-        poiList: poiList,
-        userId: "#{profileData._id}"
-      });
+        
     });

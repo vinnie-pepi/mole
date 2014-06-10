@@ -13,15 +13,9 @@ window.GeoSelector = Backbone.View.extend
   initialize: (options) ->
     @mapBoxId = options.mapBoxId
     @$modalContainer = $('#mapBoxModal')
-    @layers = []
     @currentLayer
     @initModal()
     @map = L.mapbox.map('map', @mapBoxId)
-
-  start: () ->
-    @layers.forEach (layer) =>
-      layer.target.click () =>
-        @show(layer.input)
 
   initModal: () ->
     @$modal = $(@template(@mapModalStr))
@@ -32,11 +26,6 @@ window.GeoSelector = Backbone.View.extend
       if @map.hasLayer(@currentLayer)
         @map.removeLayer(@currentLayer)
 
-  registerLayer: (name, target, input) ->
-    @layers.push
-      name: name
-      target: target
-      input: input
 
   getLatLng: () ->
     return @latLng

@@ -31,19 +31,31 @@ class Timestamps
       start.add(1, 'day')
     return dateSet
 
-  generateStamps: (options) ->
+  getRandTime: (date, start, end) ->
+    newDate  = moment(date)
+    diff     = end - start
+    randMil  = Math.round(Math.random() * diff)
+    return newDate.add(start + randMil, 'ms').toISOString()
+
+  generateStamp: (date, options) ->
+    dayName = date.format('dddd').toLowerCase()
+    if options[dayName]
+      timeRange = options[dayName].split(',')
+      startMil = parseInt(timeRange[0]) * @HOUR
+      endMil   = parseInt(timeRange[1]) * @HOUR
+      return @getRandTime(date, startMil, endMil)
+
+  generateStamps: (options, numEvents) ->
     range = @generateDateSet(options)
     stamps = []
-    # TODO: get numEvents random dates in range
-    for date in range
-      dayName = date.format('dddd').toLowerCase()
-      if options[dayName]
-        timeRange = options[dayName].split(',')
-        startMil = parseInt(timeRange[0]) * @HOUR
-        endMil   = parseInt(timeRange[1]) * @HOUR
-        diff     = endMil - startMil
-        randMil  = Math.round(Math.random() * diff)
-      stamps.push(date.add(startMil + randMil, 'ms').toISOString())
+    if numEvents
+      for i in [1..numEvents]
+        date = getRandomInArray(range)
+        stamps.push(@generateStamp(date, options))
+    else
+      for date in range
+        stamps.push(@generateStamp(date, options))
+
     return stamps
 
 
