@@ -8,6 +8,8 @@ class Timestamps
       wednesday: 3
       thursday: 4
       friday: 5
+      saturday: 6
+      sunday: 7
 
   constructor: () ->
     @SEC = 1000
