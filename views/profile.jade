@@ -1,53 +1,65 @@
 extends layout
 block content
-  div.profile
-    h1 Profile for #{profile_id}
 
-    .col-12
-      form#searchForm(action="/searchEntity", method="post")
-        div.input-group
-          input.form-control(type="text", name="q", placeholder="Search")
-          span &nbsp;near&nbsp;
-          input.form-control.near(type="text", name="location", placeholder='Example: Los Angeles')
-          input.btn.btn-primary(type="submit", value="Search")
+  .container.page-profile-show
+    .row
+      .col-md-12
+        = profileData.id
+    .row
+      .col-md-12
+        .mapWrapper
+          #map
+          form#importForm(role='form', method='post', enctype="multipart/form-data").form-inline
+            .form-group.pull-right
+              a.btn.btn-default.btn-create-events(href="/profile/#{profileData._id}/events/new") Create Events
+            .form-group
+              button.btn.btn-default#importButton Import Baseline
+              input(name='baselineData', type='file')#importAction.hide
+              input(type='hidden', name='profileId', value=profileData._id)
+            .form-group
+              #importProgress.progress
+                .progress-bar
+    .row
+      .col-md-12
+        table.table.table-bordered.table-striped#refsTable
+        a#export.btn.btn-default.btn-large.pull-right(href="/export/#{profileData._id}") Export
+        button#save.btn.btn-default.btn-large Save
 
-    .col-4
-      h2 Search Results
-      ul.list-group.entityList
-
-    .col-4
-      form#schedule
-        h2 Schedule
-        input(type="hidden", name="profile_id", value=profile_id)
-        ul.selectedList.list-group
-        .form-actions
-          button.btn.btn-success.pull-right.disabled#save Save
-    .col-4
-      h2 Results
-      ul.list-group.results#refs
-      a.btn.btn-primary.pull-right(href="/profile/" + profile_id + "/export" ) Export
-      a.btn.btn-primary.pull-right(href="/profile.tab/" + profile_id + "/export" ) Export Tab
+  input#profileData(type='hidden', data-profile=profileData)
   
-block javascripts
-  script(src='/javascripts/profile.js')
-  script(type="text/javascript").
-    var $refs = $("#refs")
-      , noise;
-    function showRefs(refs) {
-      $refs.html('');
-      refs.forEach(function(r, i) {
-        if(r.isNoise) {
-          noise = "list-group-item noise";
-        } else {
-          noise = "list-group-item";
-        }
-        $refs.append("<li class = '"  + noise + "'><div class='list-group-item-heading'>" + r.name + "</div><div class='list-group-item-text'>" + (new Date(r.timestamp).toString().replace(/GMT.+$/,'')) + "</div></li>");
-      });
-    }
 
+block javascripts
+  script(src='/javascripts/profiles.js')
+  script(src='/javascripts/uploader.js')
+  script(src='/javascripts/map.js')
+  script(src='/javascripts/views/profile.js')
+
+  script(type='text/javascript').
     $(function() {
-      var refs     = !{JSON.stringify(refs || [])};
-      var seedData = !{JSON.stringify(schedule || [])};
-      var profile  = new Profile(seedData);
-      showRefs(refs);
+
+      var profileData = $('#profileData').data('profile');
+      var profile  = new Profile({_id: profileData._id});
+      var uploader = new Uploader(profile);
+      var listView = new ListView(profile)
+      var mapView  = new MapView(profile, "#{config.mapbox.id}")
+
+      function renderViews() {
+        listView.render();
+        mapView.render();
+      }
+
+      profile.fetch({ 
+        success: function(profile) {
+          profile.on('change', function() {
+            renderViews();
+          });
+          renderViews();
+          mapView.center(profile.get('homeRef'));
+        }
+      });
     });
+
+
+
+  // script(type='text/javascript', src='/javascripts/profile/index.js')
+

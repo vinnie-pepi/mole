@@ -5,7 +5,7 @@ block content
       h2 Profiles
       ul.list-group#profileList
 
-    div.col-md-6.right-column.create-profile
+    div.col-md-6.create-profile
       h2 Create a Profile
       form#profileForm
         div.input-group
@@ -22,9 +22,11 @@ block javascripts
   script(src='/javascripts/views/index.js')
 
   script(type="text/javascript").
-    var $uuidGen = $('.uuid-gen');
-    var $idField = $('.user-name');
-    $uuidGen.click(function(e) {
-      e.preventDefault();
-      $idField.val(guid());
+    $(function() {
+      var $uuidGen = $('.uuid-gen');
+      var $idField = $('.user-name');
+      $uuidGen.click(function(e) {
+        e.preventDefault();
+        $idField.val(guid());
+      });
     });

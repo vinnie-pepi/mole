@@ -15,7 +15,7 @@ class ProfileController
       if (req.xhr)
         res.json(profile.attrs())
       else
-        res.render('profile2', { profileData: profile.attrs()})
+        res.render('profile', { profileData: profile.attrs()})
   edit: (req, res, next) ->
   update: (req, res, next) =>
     @Profile.findById req.params.id, (err, profile) ->
