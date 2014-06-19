@@ -20,13 +20,3 @@ block content
 block javascripts
   script(src='/javascripts/profiles.js')
   script(src='/javascripts/views/index.js')
-
-  script(type="text/javascript").
-    $(function() {
-      var $uuidGen = $('.uuid-gen');
-      var $idField = $('.user-name');
-      $uuidGen.click(function(e) {
-        e.preventDefault();
-        $idField.val(guid());
-      });
-    });

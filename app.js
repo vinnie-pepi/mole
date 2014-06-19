@@ -60,10 +60,14 @@ var Db = require('./lib/connection');
 var db = new Db();
 
 db.on('connected', function(mongo){
+  var Profile = require('./lib/models/profile')(mongo);
   var controllers = {};
   var ProfileController = require('./lib/controllers/profile');
-  var Profile = require('./lib/models/profile')(mongo);
+  var UploadController  = require('./lib/controllers/upload');
+
   controllers['profile'] = new ProfileController(Profile);
+  controllers['upload']  = new UploadController(Profile);
+
   routes(app, mongo, controllers);
 });
 db.connect();

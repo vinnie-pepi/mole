@@ -4,7 +4,7 @@ class ProfileController
     @Profile.all (err, docs) ->
       if (err) then return next(err)
       res.json(docs)
-  new: (req, res, next) ->
+  new: (req, res, next) =>
   create: (req, res, next) =>
     @Profile.new req.body, (err, doc) ->
       if (err) then return next(err)
@@ -16,12 +16,16 @@ class ProfileController
         res.json(profile.attrs())
       else
         res.render('profile', { profileData: profile.attrs()})
-  edit: (req, res, next) ->
+  edit: (req, res, next) =>
   update: (req, res, next) =>
     @Profile.findById req.params.id, (err, profile) ->
       profile.update req.body, (err) ->
         if (err) then return next(err)
         res.status(200).end()
-  destroy: (req, res, next) ->
+  destroy: (req, res, next) =>
+    @Profile.findById req.params.id, (err, profile) ->
+      profile.destroy (err, result) ->
+        if (err) then return next(err)
+        res.status(200).end()
 
 module.exports = ProfileController

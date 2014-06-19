@@ -1,16 +1,28 @@
 ProfilesList = Backbone.View.extend
   el: '#profileList'
+
+  events:
+    'click button.close': 'delete'
+
   profileList: """
-                 - each p in profiles
-                     li.list-group-item
-                       a(href='/profiles/'+ p.get('_id'))
-                         h4.list-group-item-heading= p.get('id')
-                         p.list-group-item-text= p.get('traits')
-               """
-  render: (profiles) ->
-    profiles = new Profiles()
+    - each p in profiles
+        li.list-group-item
+          button.close(data-id=p.get('_id')) &times;
+          a(href='/profiles/'+ p.get('_id'))
+            h4.list-group-item-heading= p.get('id')
+            p.list-group-item-text= p.get('traits')
+  """
+
+  delete: (e) ->
+    _id = e.target.dataset.id
+    model = @profiles.get(_id)
+    model.destroy()
+    @render()
+
+  render: () ->
+    @profiles = new Profiles()
     tmpl = jade.compile(@profileList)
-    profiles.fetch({
+    @profiles.fetch({
       success: (profiles) =>
         html = tmpl({
           profiles: profiles.models
@@ -20,10 +32,17 @@ ProfilesList = Backbone.View.extend
 
 ProfileForm = Backbone.View.extend
   el: '#profileForm'
+
+  initialize: () ->
+    @$idField = $('.user-name')
+
   events:
     'click .uuid-gen': 'createUUID'
     'submit': 'createProfile'
-  createUUID: () ->
+
+  createUUID: (e) ->
+    e.preventDefault()
+    @$idField.val(guid())
 
   createProfile: (e) ->
     e.preventDefault()

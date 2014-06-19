@@ -15,15 +15,17 @@ module.exports = function(app, mongo, controllers) {
   // <<<< PROFILES REST
   app.get('/profiles', controllers.profile.index);
   app.post('/profiles', controllers.profile.create);
-  app.get('/profiles/:id', controllers.profile.show);
+  app.get('/profiles/:id.:format?', controllers.profile.show);
   app.put('/profiles/:id', controllers.profile.update);
+  app.delete('/profiles/:id', controllers.profile.destroy);
+  
   // >>>> END PROFILES REST
 
   app.get('/timezone', function(req, res, next) {
   });
 
   app.post('/baseline_upload', function(req, res, next) {
-    var id      = req.body.profileId;
+    var id = req.body.profileId;
     csv().from.path(req.files.baselineData.path, { delimiter: '\t' })
       .to.array(function(data) {
         var cleaned = data.map(function(row) {

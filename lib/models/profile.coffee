@@ -62,6 +62,9 @@ module.exports = (db) ->
         cb(err, doc)
       )
 
+    destroy: (cb) ->
+      coll.remove({ _id: @id }, { single: true }, cb)
+
     attrs: () ->
       @doc
 

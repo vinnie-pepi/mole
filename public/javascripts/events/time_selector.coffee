@@ -52,11 +52,11 @@ window.TimeSelector = Backbone.View.extend
     dateTimeOpts =
       todayHighlight: true
 
-    $dateStart = $('.datetime-start')
-    $dateEnd   = $('.datetime-end')
+    @$dateStart = $('.datetime-start')
+    @$dateEnd   = $('.datetime-end')
 
-    $dateStart.datepicker(dateTimeOpts)
-    $dateEnd.datepicker(dateTimeOpts)
+    @$dateStart.datepicker(dateTimeOpts)
+    @$dateEnd.datepicker(dateTimeOpts)
       .datepicker('update', dateNow)
 
     dateNow = moment().format('MM/DD/YYYY')
@@ -123,10 +123,25 @@ window.TimeSelector = Backbone.View.extend
   hidePreview: () ->
     @$confirm.modal('hide')
 
+  validateFields: () ->
+    datestart = moment(@$dateStart.val()).isValid()
+    dateend = moment(@$dateEnd.val()).isValid()
+    if !datestart
+      @$dateStart.parent().addClass('has-error')
+    if !dateend
+      @$dateEnd.parent().addClass('has-error')
+    if datestart and dateend
+      return true
+    else
+      return false
+
   generateEvents: (e) ->
     e.preventDefault()
     q = @$el.find('form:first').serializeObject()
     locations = @poiController.getLocations()
+    unless locations.length > 0
+      return alert('need to select a location')
+    return unless @validateFields()
     events = @eventGenerator.generateEvents(q, locations)
     @showPreview(events)
 
